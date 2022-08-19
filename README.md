@@ -1,3 +1,5 @@
+[![Clojars Project](https://img.shields.io/clojars/v/org.clojars.ten-days-of-clojure/hiccup-server-components.svg)](https://clojars.org/org.clojars.ten-days-of-clojure/hiccup-server-components)
+
 # Hiccup Server Components
 
 A server-side rendering (SSR) library for Clojure web applications that facilitates **defining**, **composing**, **organising**, and **unit testing** user interface components, as well as **generating the associated HTML**. Based on the [Hiccup library](https://github.com/weavejester/hiccup)
@@ -5,6 +7,20 @@ A server-side rendering (SSR) library for Clojure web applications that facilita
 With Hiccup Server Components **everything is a component** that represents modular, abstract pieces of the user interface which are composed into a larger application with a high degree of abstraction.
 
 Can be used seamlessly with HTTP routing libraries such as [Reitit](https://github.com/metosin/reitit) or [Compojure](https://github.com/weavejester/compojure), directly with various [Clojure ring implementations](https://github.com/ring-clojure/ring) or to generate static HTML files.
+
+# Installation
+
+Clojure CLI/deps.edn:
+
+```
+org.clojars.ten-days-of-clojure/hiccup-server-components {:mvn/version "0.2.0"}
+```
+
+Leiningen/Boot:
+
+```
+[org.clojars.ten-days-of-clojure/hiccup-server-components "0.2.0"]
+```
 
 # Introduction
 
