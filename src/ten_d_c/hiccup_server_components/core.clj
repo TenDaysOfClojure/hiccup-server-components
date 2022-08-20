@@ -37,13 +37,76 @@
 
 (defn reg-component
   "Registers a component with the given `element-name` (must be a qualified keyword e.g `:my-components/login-form`)
-   which a `component` which can be either a pure function that returns Hiccup data, a vector (representing Hiccup data) or a strings
+   where the given `component` can be either a pure function that returns Hiccup data, a vector (representing Hiccup data)
+   or a string.
 
-   - `element-name` (Required): The element name (must be a qualified keyword e.g :my-components/login-form) that describes the component which can be used in Hiccup e.g `::ordered-list`, `::unordered-list`. Recommended to use fully qualified keywords to help organise components.
+   Once a component is registered it can be referenced in Hiccup data by its qualified keyword.
 
-   - `component-meta-data` (Optional): Associates arbitrary metadata with the component.
+   Supported parameters:
 
-   - `component` (Required): Can be either a pure function that returns Hiccup data, a vector (representing Hiccup data) or a string"
+   - `element-name` (Required): The element name (must be a qualified keyword e.g :my-components/login-form) that describes the component e.g. `:ux.elements/ordered-list`, `:ux.elements/unordered-list`.
+
+   - `component-meta-data` (Optional): A clojure map representing metadata of the component.
+      Should include the following keys:
+
+       - `:doc`: A Docstring describing the component as well as its parameters.
+
+       - `:example`: Hiccup data representing a single example of referencing the component.
+
+       - `:examples`: Allows for providing multiple examples, should be a map with the key being the description of the example and the value being Hiccup data representing an example of referencing the component.
+
+   - `component` (Required): Can be either a pure function that returns Hiccup data, a vector (representing Hiccup data) or a string.
+
+   Example:
+
+   ```clojure
+   (hc/reg-component
+    ;; Keyword to uniquely identify the component:
+    :ux.layouts/html-doc
+
+    ;; Include meta data in the form of a map including `doc` and `examples` keys:
+    {:doc
+     \"The main HTML document including a HEAD (with required CSS and Javascript
+       included) and BODY section.
+
+       This component is the basis for all top-level pages in the application.
+
+       The first parameter (a map) represents the component's options, followed by
+       a variable list of `child-elements` in the form of Hiccup data that will be
+       placed in the BODY.
+
+       Component options:
+
+       - `title`: The title of the HTML document (will populate the title tag
+          in the HEAD of the document)\"
+
+     :examples {\"With single child element\"
+                [:ux.layouts/html-doc
+                 {:title \"One child element\"}
+                 [:div \"Hello world\"]]
+
+                \"With multiple child elements\"
+                [:ux.layouts/html-doc
+                 {:title \"Multiple child element\"}
+                 [:h1 \"Hello world\"]
+                 [:p \"This is a test\"]
+                 [:a {:href \"/search\"} \"Try searching for more results\"]]}}
+
+    ;; Pure function implementing the responsibilities of the component:
+    (fn [{:keys [title] :as options} & child-elements]
+      [:html
+       [:head
+        [:meta {:charset \"UTF-8\"}]
+        [:meta {:content \"width=device-width, initial-scale=1.0\"
+                :name \"viewport\"}]
+        ;; Include application CSS and any javascript
+        [:link {:rel \"stylesheet\" :href \"/css/main.css\"}]
+        [:script {:src \"/js/app-bundle.js\"}]
+        ;; Include the title of the document
+        [:title title]]
+       ;; Variable child elements included in body element
+       [:body child-elements]]))
+   ```"
   ([element-name component-meta-data component]
 
    (components/reg-component element-name

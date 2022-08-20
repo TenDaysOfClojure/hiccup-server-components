@@ -12,9 +12,11 @@
 
    :codox {:extra-deps {codox/codox {:mvn/version "0.10.8"}}
            :exec-fn codox.main/generate-docs
-           :exec-args {:source-paths ["src"]
+           :exec-args {:name "Hiccup Server Components"
+                       :version "0.5.0"
+                       :source-paths ["src"]
                        :metadata {:doc/format :markdown}
-                       :doc-files ["README.md"]}}
+                       :output-path "docs/api"}}
 
    :uberjar {:replace-deps {com.github.seancorfield/depstar {:mvn/version "2.1.303"}}
              :exec-fn hf.depstar/uberjar
