@@ -1,4 +1,4 @@
-[![Clojars Project](https://img.shields.io/clojars/v/org.clojars.ten-days-of-clojure/hiccup-server-components.svg)](https://clojars.org/org.clojars.ten-days-of-clojure/hiccup-server-components)
+[![Clojars Project](https://img.shields.io/clojars/v/net.clojars.t_d_c/hiccup-server-components.svg)](https://clojars.org/net.clojars.t_d_c/hiccup-server-components)
 
 # Hiccup Server Components
 
@@ -10,16 +10,18 @@ Can be used seamlessly with HTTP routing libraries such as [Reitit](https://gith
 
 # Installation
 
-Clojure CLI/deps.edn:
+Add the following dependancy to your Clojure projects to get the latest version:
+
+#### Clojure CLI/deps.edn:
 
 ```
-org.clojars.ten-days-of-clojure/hiccup-server-components {:mvn/version "0.2.0"}
+net.clojars.t_d_c/hiccup-server-components {:mvn/version "0.2.0"}
 ```
 
-Leiningen/Boot:
+#### Leiningen/Boot:
 
 ```
-[org.clojars.ten-days-of-clojure/hiccup-server-components "0.2.0"]
+[net.clojars.t_d_c/hiccup-server-components "0.2.0"]
 ```
 
 # Introduction
