@@ -26,4 +26,4 @@
             :exec-fn deps-deploy.deps-deploy/deploy
             :exec-args {:installer :remote
                         :sign-releases? false
-                        :artifact "hiccup-server-components.jar"}}}}
+                        :artifact "target/hiccup-server-components.jar"}}}}
