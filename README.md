@@ -8,21 +8,34 @@ With Hiccup Server Components **everything is a component** that represents modu
 
 Can be used seamlessly with HTTP routing libraries such as [Reitit](https://github.com/metosin/reitit) or [Compojure](https://github.com/weavejester/compojure), directly with various [Clojure ring implementations](https://github.com/ring-clojure/ring) or to generate static HTML files.
 
+# Table of contents
+
+- [Installation](#installation)
+- [Introduction](#introduction)
+- [Getting started: Building an example login page](#getting-started-building-an-example-login-page)
+- [Defining components](#defining-components)
+- [Composing components](#composing-components)
+- [Organising components](#organising-components)
+- [Generating HTML](#generating-html)
+
+
 # Installation
 
 Add the following dependancy to your Clojure projects to get the latest version:
 
 #### Clojure CLI/deps.edn:
 
-```
-net.clojars.t_d_c/hiccup-server-components {:mvn/version "0.2.0"}
+```clojure
+net.clojars.t_d_c/hiccup-server-components {:mvn/version "0.4.0"}
 ```
 
 #### Leiningen/Boot:
 
+```clojure
+[net.clojars.t_d_c/hiccup-server-components "0.4.0"]
 ```
-[net.clojars.t_d_c/hiccup-server-components "0.2.0"]
-```
+
+[back to top](#table-of-contents)
 
 # Introduction
 
@@ -94,7 +107,9 @@ The above data structure results in the following HTML:
 </html>
 ```
 
-# Building the example login page
+[back to top](#table-of-contents)
+
+# Getting started: Building an example login page
 
 The goal of this introductory example is to demonstrate 95% of the features provided by this library. A basic understanding of the [Hiccup library](https://github.com/weavejester/hiccup) is a prerequisite.
 
@@ -543,11 +558,9 @@ Which produces the following HTML:
 </html>
 ```
 
+[back to top](#table-of-contents)
 
-
-
-
-## Defining components
+# Defining components
 
 **<u>Defining</u>** components is achieved by using the `reg-component` function, which associates a qualified keyword with either a function (for dynamic content) or a vector or string (for static content) that represents a piece of the user interface.
 
@@ -688,7 +701,9 @@ Using Hiccup data structure is always preferred over raw HTML strings, but this 
    </div>")
 ```
 
-## Composing components
+[back to top](#table-of-contents)
+
+# Composing components
 
 Once components have been registered they can be **referenced in Hiccup data by their qualified keywords** much like any other HTML element **allowing for composition**.
 
@@ -969,7 +984,9 @@ Would produce the following HTML:
 </div>
 ```
 
-## Organising components
+[back to top](#table-of-contents)
+
+# Organising components
 
 Organising components is done through the use of **qualified keywords**, **Clojure namespaces**, and **source code structure** to create a component catalogue.
 
@@ -1146,7 +1163,9 @@ Since the `ux.layouts` namespace is already required in the main component entry
 (hc/reg-component :ux.layouts/footer "...")            
 ```
 
-## Generating HTML
+[back to top](#table-of-contents)
+
+# Generating HTML
 
 The below functions are provided to generate HTML from Hiccup data that can include component references:
 

@@ -4,7 +4,8 @@
             [clojure.string :as string]
             [hiccup2.core :as hiccup]
             [ten-d-c.hiccup-server-components.component-stats :as component-stats]
-            [clojure.string :as str]))
+            [clojure.string :as str])
+  (:gen-class))
 
 ;; -- Public API --
 
