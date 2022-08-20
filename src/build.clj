@@ -9,7 +9,8 @@
 
 
 (defn clean [_]
-  (build/delete {:path base-dir}))
+  (build/delete {:path base-dir})
+  (println "Build: Deleted base directory:" base-dir))
 
 
 (defn uber [_]
@@ -18,6 +19,8 @@
   (build/copy-dir {:src-dirs ["src" "resources"]
                    :target-dir class-dir})
 
+  (println "Build: Compiling uberjar" uber-file)
+
   (build/compile-clj {:basis basis
                       :src-dirs ["src"]
                       :class-dir class-dir})
@@ -25,4 +28,6 @@
   (build/uber {:class-dir class-dir
                :uber-file uber-file
                :basis basis
-               :main 'ten-d-c.hiccup-server-components.core}))
+               :main 'ten-d-c.hiccup-server-components.core})
+
+  (println "Build: Compile complete"))
