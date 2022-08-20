@@ -18,12 +18,12 @@
                        :metadata {:doc/format :markdown}
                        :output-path "docs/api"}}
 
-   :uberjar {:replace-deps {com.github.seancorfield/depstar {:mvn/version "2.1.303"}}
-             :exec-fn hf.depstar/uberjar
-             :exec-args {:aot true :jar "hiccup-server-components.jar"}}
+   :build {:paths ["src"]
+           :extra-deps {io.github.clojure/tools.build {:git/tag "v0.8.3" :git/sha "0d20256"}}
+           :ns-default build}
 
    :deploy {:extra-deps {slipset/deps-deploy {:mvn/version "RELEASE"}}
-             :exec-fn deps-deploy.deps-deploy/deploy
-             :exec-args {:installer :remote
-                         :sign-releases? false
-                         :artifact "hiccup-server-components.jar"}}}}
+            :exec-fn deps-deploy.deps-deploy/deploy
+            :exec-args {:installer :remote
+                        :sign-releases? false
+                        :artifact "hiccup-server-components.jar"}}}}

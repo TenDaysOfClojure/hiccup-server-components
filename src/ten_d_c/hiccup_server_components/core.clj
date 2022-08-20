@@ -7,6 +7,10 @@
             [clojure.string :as str])
   (:gen-class))
 
+
+(defn ^:no-doc -main [& args])
+
+
 ;; -- Public API --
 
 (defn all-components
