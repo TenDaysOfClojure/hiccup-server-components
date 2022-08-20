@@ -18,7 +18,7 @@
 
    :uberjar {:replace-deps {com.github.seancorfield/depstar {:mvn/version "2.1.303"}}
              :exec-fn hf.depstar/uberjar
-             :exec-args {:aot false :jar "hiccup-server-components.jar"}}
+             :exec-args {:aot true :jar "hiccup-server-components.jar"}}
 
    :deploy {:extra-deps {slipset/deps-deploy {:mvn/version "RELEASE"}}
              :exec-fn deps-deploy.deps-deploy/deploy

@@ -1177,3 +1177,4 @@ The below functions are provided to generate HTML from Hiccup data that can incl
 
 - `component->html-file` Provides the convenience of not needing to construct hiccup data by generating HTML of a component with the given `component-element-name` and saving the output to the given `file-path`.
 
+[back to top](#table-of-contents)
