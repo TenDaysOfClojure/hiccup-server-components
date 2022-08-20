@@ -13,10 +13,16 @@
    :codox {:extra-deps {codox/codox {:mvn/version "0.10.8"}}
            :exec-fn codox.main/generate-docs
            :exec-args {:name "Hiccup Server Components"
-                       :version "0.7.0"
-                       :source-paths ["src"]
+                       :source-paths ["src/ten_d_c"]
                        :metadata {:doc/format :markdown}
-                       :output-path "docs/api"}}
+                       :output-path "../hiccup-server-components-api-docs/docs"
+                       :html
+                         {:transforms [[:body :div.sidebar.primary] [:substitute]
+
+                                       [:body]
+                                         [:append
+                                           [:style ".sidebar {width: 250px !important; left: 0 !important;}
+                                                    .namespace-docs {left: 250px !important;}"]]]}}}
 
    :build {:paths ["src"]
            :extra-deps {io.github.clojure/tools.build {:git/tag "v0.8.3" :git/sha "0d20256"}}

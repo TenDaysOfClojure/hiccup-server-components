@@ -18,6 +18,7 @@ Can be used seamlessly with HTTP routing libraries such as [Reitit](https://gith
 - [Organising components](#organising-components)
 - [Generating HTML](#generating-html)
 
+See [API docs](https://tendaysofclojure.github.io/hiccup-server-components-api-docs/ten-d-c.hiccup-server-components.core.html) for details.
 
 # Installation
 
@@ -1169,12 +1170,14 @@ Since the `ux.layouts` namespace is already required in the main component entry
 
 The below functions are provided to generate HTML from Hiccup data that can include component references:
 
-- `->html` Takes `hiccup-data`, that can include component references, and returns the generated HTML.
+- [`->html`](https://tendaysofclojure.github.io/hiccup-server-components-api-docs/ten-d-c.hiccup-server-components.core.html#var--.3Ehtml) Takes `hiccup-data`, that can include component references, and returns the generated HTML.
 
-- `->html-file` Takes a `file-path` and `hiccup-data`, that can include component references, and saves the generated HTML to the given `file-path`.
+- [`->html-file`](https://tendaysofclojure.github.io/hiccup-server-components-api-docs/ten-d-c.hiccup-server-components.core.html#var--.3Ehtml-file) Takes a `file-path` and `hiccup-data`, that can include component references, and saves the generated HTML to the given `file-path`.
 
-- `component->html` Provides the convenience of not needing to construct hiccup data by generating HTML of a component with the given `component-element-name`.
+- [`component->html`](https://tendaysofclojure.github.io/hiccup-server-components-api-docs/ten-d-c.hiccup-server-components.core.html#var-component-.3Ehtml) Provides the convenience of not needing to construct hiccup data by generating HTML of a component with the given `component-element-name`.
 
-- `component->html-file` Provides the convenience of not needing to construct hiccup data by generating HTML of a component with the given `component-element-name` and saving the output to the given `file-path`.
+- [`component->html-file`](https://tendaysofclojure.github.io/hiccup-server-components-api-docs/ten-d-c.hiccup-server-components.core.html#var-component-.3Ehtml-file) Provides the convenience of not needing to construct hiccup data by generating HTML of a component with the given `component-element-name` and saving the output to the given `file-path`.
+
+See [API docs](https://tendaysofclojure.github.io/hiccup-server-components-api-docs/ten-d-c.hiccup-server-components.core.html) for details.
 
 [back to top](#table-of-contents)
