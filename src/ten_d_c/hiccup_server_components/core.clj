@@ -1,4 +1,20 @@
 (ns ten-d-c.hiccup-server-components.core
+  "A server-side rendering (SSR) library for Clojure web applications that
+  facilitates **defining**, **composing**, **organising**, and **unit testing**
+  user interface components, as well as **generating the associated HTML**.
+  Based on the [Hiccup library](https://github.com/weavejester/hiccup)
+
+  Components represent modular, abstract pieces of the user interface which
+  are composed into a larger, complex applications with a high degree of abstraction.
+
+  Can be used seamlessly with HTTP routing libraries such as
+  [Reitit](https://github.com/metosin/reitit),
+  [Compojure](https://github.com/weavejester/compojure), and directly with
+  various [Clojure ring implementations](https://github.com/ring-clojure/ring)
+  for generating HTML responses. Can also be used to generate static HTML files.
+
+  See [full README](https://github.com/TenDaysOfClojure/hiccup-server-components/blob/master/README.md)
+  for examples and further details."
   (:require [ten-d-c.hiccup-server-components.components :as components]
             [ten-d-c.hiccup-server-components.compiler :as compiler]
             [clojure.string :as string]
