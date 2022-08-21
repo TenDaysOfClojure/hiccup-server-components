@@ -21,27 +21,81 @@ Can be used seamlessly with HTTP routing libraries such as [Reitit](https://gith
 
 # Installation
 
+[![Clojars Project](https://img.shields.io/clojars/v/net.clojars.t_d_c/hiccup-server-components.svg)](https://clojars.org/net.clojars.t_d_c/hiccup-server-components)
+
 Add the following dependancy to your Clojure projects to get the latest version:
 
 #### Clojure CLI/deps.edn:
 
 ```clojure
-net.clojars.t_d_c/hiccup-server-components {:mvn/version "0.11.0"}
+net.clojars.t_d_c/hiccup-server-components {:mvn/version "0.12.0"}
 ```
 
 #### Leiningen/Boot:
 
 ```clojure
-[net.clojars.t_d_c/hiccup-server-components "0.11.0"]
+[net.clojars.t_d_c/hiccup-server-components "0.12.0"]
 ```
 
 [back to top](#table-of-contents)
 
 # Introduction
 
-Hiccup server components allows developers to define web pages and user interface components with a high level of abstraction.
+### Using Hiccup to represent HTML
 
-The below Hiccup data represents a typical login webpage with an HTML form, email and password inputs along with login button and back button:
+The [Hiccup library](https://github.com/weavejester/hiccup) is used for representing HTML in Clojure. It uses vectors to represent elements, and maps to represent an element's attributes.
+
+The below Hiccup data represents the HTML for a typical login webpage:
+
+```Clojure
+;; HTML document
+[:html
+ [:head
+  [:meta {:charset "UTF-8"}]
+  [:meta {:content "width=device-width, initial-scale=1.0", :name "viewport"}]
+
+  ;; Include CSS and javascript assets
+  [:link {:rel "stylesheet", :href "/css/main.css"}]
+  [:script {:src "/js/app-bundle.js"}]
+  [:title "Login now"]]
+ [:body
+
+  ;; HTML form which posts to /login
+  [:form.input-form {:action "/login" :method "POST"}
+   [:h1.form-title "Login now"]
+   [:p.form-intro-text
+    "Enter your email address and password to access your personal dashboard"]
+
+   ;; Email input field with label
+   [:div.form-field
+    [:label.form-label {:for "email-address"} "Email address"]
+    [:input.text-input
+     {:id "email-address",
+      :name "email-address",
+      :autofocus true,
+      :type "text"}]]
+
+   ;; Password field with label
+   [:div.form-field
+    [:label.form-label {:for "password"} "Password"]
+    [:input.text-input
+     {:id "password", :name "password", :autofocus false, :type "password"}]]
+
+   ;; Form action buttons included primary button and cancel button
+   [:div.form-action-buttons
+    [:button.primary-submit-button {:type "submit"} "Login now"]
+
+    ;; Cancel button navigates back to '/home' using javascript
+    [:button.cancel-button
+     {:type "button", :onclick "javascript:window.location='/home'"}
+     "Cancel"]]]]]
+```
+
+### Further abstraction with Hiccup server components
+
+Hiccup server components allows developers to represent web pages and user interface components with a high level of abstraction, leveraging the [Hiccup library](https://github.com/weavejester/hiccup).
+
+ Using Hiccup server components We can represent the typical login webpage as follows:
 
 ```clojure
 [:ux.layouts/html-doc {:title "Login now"}
@@ -67,7 +121,7 @@ The below Hiccup data represents a typical login webpage with an HTML form, emai
 
 ```
 
-The above data structure results in the following HTML:
+Which would result the following HTML:
 
 ```html
 <html>
@@ -79,7 +133,7 @@ The above data structure results in the following HTML:
       <title>Login now</title>
   </head>
   <body>
-      <form action="/login" class="input-form">
+      <form action="/login" method="POST" class="input-form">
           <h1 class="form-title">Login now</h1>
           <p class="form-intro-text">
             Enter your email address and password to access your personal
@@ -239,9 +293,9 @@ The next step is to register components that will be responsible for the HTML fo
 
  ;; Include meta data:
  {:doc
-  "Builds an HTML form with the given `action` URL and provides a
-   standardised `title`, optional `intro-text` which will be displayed before
-   form elements.
+  "Builds an HTML form which will perform an HTTP POST to the given `action` URL
+   and provides a standardised `title`, optional `intro-text` which will be
+   displayed before form elements.
 
    Along with the above options supports a variable amount of form elements.
 
@@ -258,7 +312,7 @@ The next step is to register components that will be responsible for the HTML fo
                   e.g. \"Enter your details to login and view your dashboard\"."
 
   :example [:ux.forms/form
-            {:action "/auth/login"
+            {:action "/auth/login"             
              :title "Login now"
              :intro-text "Provide your details to login and view your personal
                           dashboard"}
@@ -269,7 +323,7 @@ The next step is to register components that will be responsible for the HTML fo
 
  ;; Pure function implementing the responsibilities of the component:              
  (fn [{:keys [action title intro-text]} & form-elements]
-   [:form.input-form {:action action}
+   [:form.input-form {:action action :method "POST"}
     (when title [:h1.form-title title])
     (when intro-text [:p.form-intro-text intro-text])
     form-elements]))
@@ -293,7 +347,7 @@ The `->html` function can be used to convert Hiccup data, which references the c
 The following HTML is returned:
 
 ```html
-<form action="/login" class="input-form">
+<form action="/login" method="POST" class="input-form">
     <h1 class="form-title">Login now</h1>
     <p class="form-intro-text">Provide your details to login and view your personal
                               dashboard</p>
@@ -530,7 +584,7 @@ Which produces the following HTML:
       <title>Login now</title>
   </head>
   <body>
-      <form action="/login" class="input-form">
+      <form action="/login" method="POST" class="input-form">
           <h1 class="form-title">Login now</h1>
           <p class="form-intro-text">
             Enter your email address and password to access your personal
