@@ -184,7 +184,7 @@ The first step, after including the library in your project, is to require the n
 
 The first component we'll register is an HTML document which involves the following steps:
 
- - Using the `reg-component` function to register a new component using a qualified keyword.
+ - Using the [`reg-component` function](https://tendaysofclojure.github.io/hiccup-server-components-api-docs/ten-d-c.hiccup-server-components.core.html#var-reg-component) to register a new component using a qualified keyword.
 
  - Include `doc` and `examples` metadata (in the form of a clojure map) when registering the component to document the component.
 
@@ -239,7 +239,7 @@ The first component we'll register is an HTML document which involves the follow
     [:body child-elements]]))
 ```
 
-The `->html` function can be used to convert Hiccup data, which references the component using its qualified keyword, to HTML:
+The [`->html` function](https://tendaysofclojure.github.io/hiccup-server-components-api-docs/ten-d-c.hiccup-server-components.core.html#var--.3Ehtml) can be used to convert Hiccup data, which references the component using its qualified keyword, to HTML:
 
 ```clojure
 (hc/->html
@@ -273,7 +273,7 @@ The following HTML is returned:
 
 The next step is to register components that will be responsible for the HTML form which involves the following steps:
 
-- Using the `reg-component` function to register a new component using a qualified keyword.
+- Using the [`reg-component` function](https://tendaysofclojure.github.io/hiccup-server-components-api-docs/ten-d-c.hiccup-server-components.core.html#var-reg-component) to register a new component using a qualified keyword.
 
 - Including `doc` and `example` metadata (in the form of a clojure map) when registering the component to document the component.
 
@@ -329,7 +329,7 @@ The next step is to register components that will be responsible for the HTML fo
     form-elements]))
 ```
 
-The `->html` function can be used to convert Hiccup data, which references the component using its qualified keyword, to HTML:
+The [`->html` function](https://tendaysofclojure.github.io/hiccup-server-components-api-docs/ten-d-c.hiccup-server-components.core.html#var--.3Ehtml) can be used to convert Hiccup data, which references the component using its qualified keyword, to HTML:
 
 ```clojure
 (hc/->html
@@ -361,7 +361,7 @@ The following HTML is returned:
 ### Step 4: Register components for form input
 
 The next step is to register components that will be responsible for text input
-which, as with previous examples, involves using the `reg-component` function, including `doc` and `examples` metadata, and
+which, as with previous examples, involves using the [`reg-component` function](https://tendaysofclojure.github.io/hiccup-server-components-api-docs/ten-d-c.hiccup-server-components.core.html#var-reg-component), including `doc` and `examples` metadata, and
 using a pure function, implement the components responsibilities that include:
 
 ```Clojure
@@ -408,7 +408,7 @@ using a pure function, implement the components responsibilities that include:
       :autofocus auto-focus? :type input-type}]]))
 ```
 
-The `->html` function can be used to convert Hiccup data, which references the component using its qualified keyword, to HTML:
+The [`->html` function](https://tendaysofclojure.github.io/hiccup-server-components-api-docs/ten-d-c.hiccup-server-components.core.html#var--.3Ehtml) can be used to convert Hiccup data, which references the component using its qualified keyword, to HTML:
 
 ```clojure
 [:ux.forms/text-input
@@ -498,7 +498,7 @@ that will centre align and space the buttons consistently:
     children]))
 ```
 
-The `->html` function can be used to convert Hiccup data, which references the component using its qualified keyword, to HTML:
+The [`->html` function](https://tendaysofclojure.github.io/hiccup-server-components-api-docs/ten-d-c.hiccup-server-components.core.html#var--.3Ehtml) can be used to convert Hiccup data, which references the component using its qualified keyword, to HTML:
 
 ```
 (hc/->html
@@ -566,7 +566,7 @@ represents a typical login page a user would use to authenticate:
       [:ux.forms/cancel-button "Cancel" "/home"]]]]))
 ```
 
-We can then generate the HTML by using the `component->html` function:
+We can then generate the HTML by using the [`component->html` function](https://tendaysofclojure.github.io/hiccup-server-components-api-docs/ten-d-c.hiccup-server-components.core.html#var-component-.3Ehtml):
 
 ```clojure
 (hc/component->html :ux.pages/login)
@@ -616,7 +616,7 @@ Which produces the following HTML:
 
 # Defining components
 
-**<u>Defining</u>** components is achieved by using the `reg-component` function, which associates a qualified keyword with either a function (for dynamic content) or a vector or string (for static content) that represents a piece of the user interface.
+**<u>Defining</u>** components is achieved by using the [`reg-component` function](https://tendaysofclojure.github.io/hiccup-server-components-api-docs/ten-d-c.hiccup-server-components.core.html#var-reg-component), which associates a qualified keyword with either a function (for dynamic content) or a vector or string (for static content) that represents a piece of the user interface.
 
 In turn, components can then be referenced by their qualified keyword in Hiccup data, much like HTML elements, allowing for composition.
 
@@ -670,7 +670,7 @@ The above component function destructures a `text` parameter (representing the b
 
 ### Component metadata
 
-When a component is registered using the `reg-component` function, metadata in the form of a map can be included as the second parameter to help document the component and its parameters as well as provide examples of component usage.
+When a component is registered using the [`reg-component` function](https://tendaysofclojure.github.io/hiccup-server-components-api-docs/ten-d-c.hiccup-server-components.core.html#var-reg-component), metadata in the form of a map can be included as the second parameter to help document the component and its parameters as well as provide examples of component usage.
 
 While arbitrary metadata can be provided, the convention of component metadata includes the following keys:
 
@@ -1227,9 +1227,10 @@ The below functions are provided to generate HTML from Hiccup data that can incl
 
 - [`->html-file`](https://tendaysofclojure.github.io/hiccup-server-components-api-docs/ten-d-c.hiccup-server-components.core.html#var--.3Ehtml-file) Takes a `file-path` and `hiccup-data`, that can include component references, and saves the generated HTML to the given `file-path`.
 
-- [`component->html`](https://tendaysofclojure.github.io/hiccup-server-components-api-docs/ten-d-c.hiccup-server-components.core.html#var-component-.3Ehtml) Provides the convenience of not needing to construct hiccup data by generating HTML of a component with the given `component-element-name`.
+- [`component->html`](https://tendaysofclojure.github.io/hiccup-server-components-api-docs/ten-d-c.hiccup-server-components.core.html#var-component-.3Ehtml) Generates and returns HTML of a component with the given `component-element-name`.
 
-- [`component->html-file`](https://tendaysofclojure.github.io/hiccup-server-components-api-docs/ten-d-c.hiccup-server-components.core.html#var-component-.3Ehtml-file) Provides the convenience of not needing to construct hiccup data by generating HTML of a component with the given `component-element-name` and saving the output to the given `file-path`.
+- [`component->html-file`](https://tendaysofclojure.github.io/hiccup-server-components-api-docs/ten-d-c.hiccup-server-components.core.html#var-component-.3Ehtml-file) Generates the HTML of a component with the given `component-element-name` and
+saves the output to the given `file-path`.
 
 See [API docs](https://tendaysofclojure.github.io/hiccup-server-components-api-docs/ten-d-c.hiccup-server-components.core.html) for details.
 
