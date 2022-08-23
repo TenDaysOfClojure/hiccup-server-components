@@ -176,3 +176,19 @@
   ([file-path hiccup-data local-components]
    (spit file-path
          (->html hiccup-data local-components))))
+
+
+(defn component->html
+  [component-element-name params local-components]
+  (let [hiccup-data (if (not (nil? params))
+                      [component-element-name params]
+                      [component-element-name])]
+    (->html hiccup-data local-components)))
+
+
+(defn component->html-file
+  [file-path component-element-name params local-components]
+  (spit file-path
+        (component->html component-element-name
+                         params
+                         local-components)))

@@ -21,7 +21,8 @@
             [clojure.string :as string]
             [hiccup2.core :as hiccup]
             [ten-d-c.hiccup-server-components.component-stats :as component-stats]
-            [clojure.string :as str])
+            [clojure.string :as str]
+            [ten-d-c.hiccup-server-components.http-server :as http-server])
   (:gen-class))
 
 
@@ -149,11 +150,11 @@
 
 
 (defn ->hiccup
-  "Processes components in the provided `hiccup-data` and returns expanded
-   Hiccup data.
+  "Processes components in the provided `hiccup-data` (vectors describing HTML)
+   and returns expanded Hiccup data (vectors describing HTML).
 
-  - `hiccup-data`: The hiccup data to process which includes references to
-                   components.
+  - `hiccup-data`: The hiccup data (vectors describing HTML) to process which
+                   includes references to components.
 
   - `local-components`: (Optional) A map of component configuration. Components
                         defined here will overwrite components registered with
@@ -166,11 +167,11 @@
 
 
 (defn ->html
-  "Takes `hiccup-data`, that can include component references, and returns the
-   generated HTML.
+  "Takes `hiccup-data` (vectors describing HTML), that can include component
+   references, and returns the generated HTML.
 
-  - `hiccup-data`: The hiccup data to process which may include references to
-     components.
+  - `hiccup-data`: The hiccup data (vectors describing HTML) to process which
+                   may include references to components.
 
   - `local-components`: (Optional) A map of component configuration. Components
                         defined here will overwrite components registered with
@@ -182,13 +183,13 @@
 
 
 (defn ->html-file
-  "Takes a `file-path` and `hiccup-data`, that can include component references,
-  and saves the generated HTML to the given `file-path`.
+  "Takes a `file-path` and `hiccup-data` (vectors describing HTML), that can
+  include component references, and saves the generated HTML to the given `file-path`.
 
   - `file-path`: The file path to save the outputed HTML to.
 
-  - `hiccup-data`: The hiccup data to process which may include references to
-                   components.
+  - `hiccup-data`: The hiccup data (vectors describing HTML) to process which
+                   may include references to components.
 
   - `local-components`: (Optional) A map of component configuration. Components
                         defined here will overwrite components registered with
@@ -220,10 +221,8 @@
    (component->html component-element-name params {}))
 
   ([component-element-name params local-components]
-   (let [hiccup-data (if (not (nil? params))
-                       [component-element-name params]
-                       [component-element-name])]
-     (->html hiccup-data local-components))))
+   (compiler/component->html
+    component-element-name params local-components)))
 
 
 (defn component->html-file
@@ -249,10 +248,8 @@
    (component->html-file file-path component-element-name params {}))
 
   ([file-path component-element-name params local-components]
-   (spit file-path
-         (component->html component-element-name
-                          params
-                          local-components))))
+   (compiler/component->html-file
+    file-path component-element-name params local-components)))
 
 
 (defn component-counts
@@ -285,3 +282,64 @@
    javascript in Hiccup data."
    [& javascript]
    (hiccup/raw (string/join javascript)))
+
+
+(defn wrap-response-middleware
+  "Ring middleware that supports responses that generate and return HTML using
+   Hiccup server components.
+
+   When configuring HTTP route handlers, a map including the following keys
+   can be returned which will result in HTML:
+
+   - `:hsc/component`: The qualified keyword of the component to use to generate
+                       and return HTML. Component params can be supplied with
+                       the `:hsc/params` key.
+
+   - `:hsc/params` (Optional): Used in conjunction with the `:hsc/component` key,
+                   represents params that will be passed to the component.
+
+   - `:hsc/html`: Hiccup data (vectors describing HTML), that can include
+                  component references, that will be used to generate HTML.
+
+   Works with [Compojure](https://github.com/weavejester/compojure) and
+   [Reitit](https://github.com/metosin/reitit) routing libraries as well
+   as Ring compatible HTTP servers.
+
+
+  Example of Compojure routes with middleware configured:
+
+  ```clojure
+  (ns http-routing
+    (:require [compojure.core :refer :all]
+              [ten-d-c.hiccup-server-components.core :as hc]))
+
+  (compojure.core/defroutes app
+
+  ;; Generates and returns the HTML for the `:ux.pages/home` component, no
+  ;; component params are provided.
+  (GET \"/\" []
+       {:hsc/component :ux.pages/home})
+
+
+  ;; Generates and returns the HTML for the `:ux.pages/dashboard` component,
+  ;; passing the component the `hsc/params` key as params.
+  (GET \"/dashboard\" []
+       {:hsc/component :ux.pages/dashboard
+        :hsc/params {:username \"bobsmith\"
+                     :email-address \"bobsmith@somemail.net\"}})
+
+
+  ;; Generates and returns the HTML from Hiccup data (which can include
+  ;; component refererences) in the `:hsc/html` key.
+  (GET \"/testing\" []
+       {:hsc/html [:ux.layouts/html-doc {:title \"A test page\"}
+                   [:div
+                    [:h1.text-3xl \"Hello world From HTML\"]
+                    [:p \"This is a test\"]]]}))
+
+
+  (def web-app (-> app
+                   (hc/wrap-response-middleware)))
+  ```"
+  [request]
+  (http-server/wrap-response-middleware request))
