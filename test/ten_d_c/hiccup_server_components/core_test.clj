@@ -1,7 +1,8 @@
 (ns ten-d-c.hiccup-server-components.core-test
   (:require [clojure.test :refer :all]
             [ten-d-c.hiccup-server-components.core :as hc]
-            [clojure.string :as string]))
+            [clojure.string :as string]
+            [clojure.pprint]))
 
 (defn register-primary-button []
   (hc/reg-component
@@ -72,9 +73,11 @@
 
     (hc/clear-components)
 
-    (is (nil? (hc/get-component-meta-data :ux.buttons/primary-button)))
+    (is (= {:element-name :ux.buttons/primary-button}
+           (hc/get-component-meta-data :ux.buttons/primary-button)))
 
-    (is (nil? (hc/get-component-meta-data :ux.buttons/cancel-button)))
+    (is (= {:element-name :ux.buttons/cancel-button}
+           (hc/get-component-meta-data :ux.buttons/cancel-button)))
 
     (register-primary-button)
     (register-cancel-button)
@@ -88,11 +91,14 @@
                     line-number] :as meta-data}
             (hc/get-component-meta-data :ux.buttons/primary-button)]
 
+        (clojure.pprint/pprint
+         (hc/get-component-meta-data :ux.buttons/primary-button))
+
         (is (= '(:element-name
                  :component-type
                  :namespace
                  :defined-in-file
-                 :line-number) (keys  meta-data)))
+                 :line-number) (keys meta-data)))
         (is (= :ux.buttons/primary-button element-name))
         (is (= "function" component-type))
         (is (= "ten_d_c.hiccup_server_components.core_test" namespace))
@@ -152,8 +158,8 @@
 
     (is (empty? (hc/all-components)))
 
-
-    (is (nil? (hc/get-component-meta-data :ux.buttons/primary-button)))
+    (is (= {:element-name :ux.buttons/primary-button}
+           (hc/get-component-meta-data :ux.buttons/primary-button)))
 
     (is (= :ux.buttons/primary-button
            (hc/reg-component :ux.buttons/primary-button
@@ -164,9 +170,11 @@
     (is (not
          (nil? (hc/get-component-meta-data :ux.buttons/primary-button))))
 
-    (is (= '(:ux.buttons/primary-button) (map :element-name (hc/all-components))))
+    (is (= '(:ux.buttons/primary-button)
+           (map :element-name (hc/all-components))))
 
-    (is (nil? (hc/get-component-meta-data :ux.buttons/cancel-button)))
+    (is (= {:element-name :ux.buttons/cancel-button}
+           (hc/get-component-meta-data :ux.buttons/cancel-button)))
 
     (is (= :ux.buttons/cancel-button
            (hc/reg-component :ux.buttons/cancel-button
