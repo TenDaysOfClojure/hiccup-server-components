@@ -28,13 +28,13 @@ Add the following dependancy to your Clojure projects to get the latest version:
 #### Clojure CLI/deps.edn:
 
 ```clojure
-net.clojars.t_d_c/hiccup-server-components {:mvn/version "0.13.0"}
+net.clojars.t_d_c/hiccup-server-components {:mvn/version "0.14.0"}
 ```
 
 #### Leiningen/Boot:
 
 ```clojure
-[net.clojars.t_d_c/hiccup-server-components "0.13.0"]
+[net.clojars.t_d_c/hiccup-server-components "0.14.0"]
 ```
 
 [back to top](#table-of-contents)
