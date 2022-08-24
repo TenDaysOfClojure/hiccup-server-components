@@ -4,7 +4,7 @@
 
 A server-side rendering (SSR) library for Clojure web applications that facilitates **defining**, **composing**, **organising**, and **unit testing** user interface components, as well as **generating the associated HTML**. Based on the [Hiccup library](https://github.com/weavejester/hiccup)
 
-The goal of this library is to *facilitate rapid web application development* and *increase maintainability of user interface code*.
+The goal of this library is to **facilitate rapid web application development** and **increase maintainability of user interface code**.
 
 Components represent modular, abstract pieces of the user interface which are composed into a larger, complex applications with a high degree of abstraction.
 
