@@ -285,28 +285,30 @@
 
 
 (defn wrap-response-middleware
-  "Ring middleware that supports responses that generate and return HTML using
-   Hiccup server components.
+  "Ring middleware that will generate HTML using Hiccup server components conventions
+   and set the `:body` of the response to the generated HTML.
 
-   When configuring HTTP route handlers, a map including the following keys
-   can be returned which will result in HTML:
+   HTTP route handlers configured with this middleware can return a map including
+   the following keys which will result in HTML being set on the response body:
 
    - `:hsc/component`: The qualified keyword of the component to use to generate
-                       and return HTML. Component params can be supplied with
-                       the `:hsc/params` key.
+                       HTML that will be set as the `:body` of the response.
+                       Component params can be supplied with the `:hsc/params`
+                       key.
 
    - `:hsc/params` (Optional): Used in conjunction with the `:hsc/component` key,
                    represents params that will be passed to the component.
 
    - `:hsc/html`: Hiccup data (vectors describing HTML), that can include
-                  component references, that will be used to generate HTML.
+                  component references, that will be used to generate HTML that
+                  will be set as the `:body` of the response.
 
    Works with [Compojure](https://github.com/weavejester/compojure) and
    [Reitit](https://github.com/metosin/reitit) routing libraries as well
    as Ring compatible HTTP servers.
 
-
-  Example of Compojure routes with middleware configured:
+  Example of [Compojure](https://github.com/weavejester/compojure) routes with
+  middleware configured:
 
   ```clojure
   (ns http-routing
@@ -340,6 +342,13 @@
 
   (def web-app (-> app
                    (hc/wrap-response-middleware)))
-  ```"
+  ```
+
+  Example of [Reitit](https://github.com/metosin/reitit) routes with
+  middleware configured:
+  ```
+  ```
+
+  "
   [request]
   (http-server/wrap-response-middleware request))

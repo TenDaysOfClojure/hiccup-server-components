@@ -14,7 +14,8 @@
       (if (hiccup-server-components-response? response)
         (let[html (if-let [component (:hsc/component response)]
                     (compiler/component->html component
-                                              (:hsc/params response))
+                                              (:hsc/params response)
+                                              {})
                     (compiler/->html (:hsc/html response)))]
           (assoc response :body html))
         response))))
