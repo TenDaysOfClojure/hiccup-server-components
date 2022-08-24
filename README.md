@@ -17,6 +17,7 @@ Can be used seamlessly with HTTP routing libraries such as [Reitit](https://gith
 - [Composing components](#composing-components)
 - [Organising components](#organising-components)
 - [Generating HTML](#generating-html)
+- [HTTP routing middleware](#http-routing-middleware)
 - [Full API documentation](https://tendaysofclojure.github.io/hiccup-server-components-api-docs/ten-d-c.hiccup-server-components.core.html)
 
 # Installation
@@ -1233,5 +1234,107 @@ The below functions are provided to generate HTML from Hiccup data that can incl
 saves the output to the given `file-path`.
 
 See [API docs](https://tendaysofclojure.github.io/hiccup-server-components-api-docs/ten-d-c.hiccup-server-components.core.html) for details.
+
+[back to top](#table-of-contents)
+
+# HTTP routing middleware
+
+Ring middleware that will generate HTML using Hiccup server components conventions
+and set the `:body` of the response to the generated HTML.
+
+Works with [Compojure](https://github.com/weavejester/compojure) and
+[Reitit](https://github.com/metosin/reitit) routing libraries as well
+as Ring compatible HTTP servers.
+
+HTTP route handlers configured with this middleware can return a map including
+the following keys which will result in HTML being set on the response body:
+
+- `:hsc/component`: The qualified keyword of the component to use to generate
+                   HTML that will be set as the `:body` of the response.
+                   Component params can be supplied with the `:hsc/params`
+                   key.
+
+- `:hsc/params` (Optional): Used in conjunction with the `:hsc/component` key,
+               represents params that will be passed to the component.
+
+- `:hsc/html`: Hiccup data (vectors describing HTML), that can include
+              component references, that will be used to generate HTML that
+              will be set as the `:body` of the response.
+
+Example of [Compojure](https://github.com/weavejester/compojure) routes with
+middleware configured:
+
+```clojure
+(ns http-routing.compojure
+  (:require [compojure.core :refer :all]
+            [ten-d-c.hiccup-server-components.core :as hc]))
+
+(compojure.core/defroutes app
+
+  ;; Generates and returns the HTML for the `:ux.pages/home` component, no
+  ;; component params are provided.
+  (GET "/" []
+       {:hsc/component :ux.pages/home})
+
+
+  ;; Generates and returns the HTML for the `:ux.pages/dashboard` component,
+  ;; passing the component the `hsc/params` key as params.
+  (GET "/dashboard" []
+       {:hsc/component :ux.pages/dashboard
+        :hsc/params {:username "bobsmith"
+                     :email-address "bobsmith@somemail.net"}})
+
+
+  ;; Generates and returns the HTML from Hiccup data (which can include
+  ;; component refererences) in the `:hsc/html` key.
+  (GET "/testing" []
+       {:hsc/html [:ux.layouts/html-doc {:title "A test page"}
+                   [:div
+                    [:h1.text-3xl "Hello world From HTML"]
+                    [:p "This is a test"]]]}))
+
+
+(def web-app (-> app
+                 (hc/wrap-response-middleware)))
+```
+
+Example of [Reitit](https://github.com/metosin/reitit) routes with
+middleware configured:
+
+```clojure
+(ns http-routing.reitit
+  (:require [reitit.ring :as ring]
+            [ten-d-c.hiccup-server-components.core :as hc]))
+
+
+(def web-app
+  (ring/ring-handler
+   (ring/router
+    [["/" {:handler (fn [_]
+                      {:hsc/component :ux.pages/home})}]
+
+     ["/dashboard"
+      {:get
+       {:handler
+        (fn [_]
+          {:hsc/component :ux.pages/dashboard
+           :hsc/params {:username "bobsmith"
+                        :email-address "bobsmith@somemail.net"}})}}]
+
+     ["/testing"
+      {:get
+       {:handler
+        (fn [_]
+          {:hsc/html [:ux.layouts/html-doc {:title "A test page"}
+                      [:div
+                       [:h1.text-3xl "Hello world From HTML"]
+                       [:p "This is a test"]]]})}}]]
+
+    {:data {:middleware [hc/wrap-response-middleware]
+            :enable true}})))
+```
+
+See [`wrap-response-middleware` documentation](https://tendaysofclojure.github.io/hiccup-server-components-api-docs/ten-d-c.hiccup-server-components.core.html#var-wrap-response-middleware) for more details.
+
 
 [back to top](#table-of-contents)
