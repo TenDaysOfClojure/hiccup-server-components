@@ -6,7 +6,7 @@ A server-side rendering (SSR) library for Clojure web applications that facilita
 
 The goal of this library is to **facilitate rapid web application development** and **increase maintainability of user interface code** by providing conventions and tools to model user interfaces.
 
-Components represent modular, abstract pieces of the user interface which are composed into a larger, complex applications with a high degree of abstraction.
+**Components** represent **modular**, **abstract pieces of the user interface** which are **composed into a larger**, **complex applications** with a high degree of abstraction.
 
 Can be used seamlessly with HTTP routing libraries such as [Reitit](https://github.com/metosin/reitit), [Compojure](https://github.com/weavejester/compojure), and directly with various [Clojure ring implementations](https://github.com/ring-clojure/ring) for generating HTML responses. Can also be used to generate static HTML files.
 
