@@ -22,7 +22,8 @@
             [hiccup2.core :as hiccup]
             [ten-d-c.hiccup-server-components.component-stats :as component-stats]
             [clojure.string :as str]
-            [ten-d-c.hiccup-server-components.http-server :as http-server])
+            [ten-d-c.hiccup-server-components.http-server :as http-server]
+            [ten-d-c.hiccup-server-components.markup-helpers :as markup-helpers])
   (:gen-class))
 
 
@@ -381,3 +382,70 @@
   ```"
   [request]
   (http-server/wrap-response-middleware request))
+
+
+(defn css-classes
+  "Convenience function for contructing 'class' attributes of HTML elements.
+
+   Takes a variable list of `classes` which can be keywords, strings, nil or
+   empty strings and contructs a consistent space seperated string that
+   represents the css classes of an HTML element.
+
+  Keywords and strings can be space, comma or period seperated and will be
+  expanded into seperate css classes.
+
+  Ignores nil values and blank strings, allowing for conditional contruction of
+  css classes.
+
+  Useful for contructing 'class' attributes of HTML elements.
+
+  Examples:
+
+  ```clojure
+  ;; Dot seperated keyword
+  (css-classes :one.two.three) ;; => \"one two three\"
+
+  ;; Dot seperated string
+  (css-classes \"one.two.three\") ;; => \"one two three\"
+
+  ;; Dot seperated string
+  (css-classes \"one.two.three\") ;; => \"one two three\"
+
+  ;; Comma seperated string
+  (css-classes \"one,two,three\") ;; => \"one two three\"
+
+  ;; Keywords
+  (css-classes :one :two :three) ;; => \"one two three\"
+
+  ;; Strings
+  (css-classes \"one\" \"two\" \"three\") ;; => \"one two three\"
+
+  ;; Nils are ignored allowing for conditional statements
+  (css-classes :one
+               :two
+               :three
+               ;; returns nil
+               (when (= 1 2) :four)) ;; => \"one two three\"
+  ```
+
+  Example usage with Hiccup data:
+  ```clojure
+  [:div {:class (css-classes :one.two.three :four :five)}
+    \"Hello world\"]
+
+  ;; => \"<div class=\"one two three four five\">Hello world</div>\"
+
+  ;; Conditional css classes
+
+  (let [error?  true
+        message \"This is a test\"]
+    [:div {:class (css-classes :alert
+                               (if error?
+                                 :error-alert
+                                 :info-alert))}
+      message])
+
+  ;; => \"<div class=\"alert error-alert\">This is a test</div>\"
+  ```"
+  [& classes]
+  (apply markup-helpers/css-classes classes))

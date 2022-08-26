@@ -1,8 +1,8 @@
 (ns ten-d-c.hiccup-server-components.core-test
   (:require [clojure.test :refer :all]
             [ten-d-c.hiccup-server-components.core :as hc]
-            [clojure.string :as string]
-            [clojure.pprint]))
+            [clojure.string :as string]))
+
 
 (defn register-primary-button []
   (hc/reg-component
@@ -87,25 +87,17 @@
       (let [{:keys [element-name
                     component-type
                     namespace
-                    defined-in-file
                     line-number] :as meta-data}
             (hc/get-component-meta-data :ux.buttons/primary-button)]
-
-        (clojure.pprint/pprint
-         (hc/get-component-meta-data :ux.buttons/primary-button))
 
         (is (= '(:element-name
                  :component-type
                  :namespace
-                 :defined-in-file
                  :line-number) (keys meta-data)))
         (is (= :ux.buttons/primary-button element-name))
         (is (= "function" component-type))
         (is (= "ten_d_c.hiccup_server_components.core_test" namespace))
-        (is (string/ends-with?
-             defined-in-file
-             "hiccup-server-components/test/ten_d_c/hiccup_server_components/core_test.clj"))
-        (is (= 7 line-number))))
+        (is (= 8 line-number))))
 
 
     (testing "Cancel button"
@@ -113,22 +105,17 @@
       (let [{:keys [element-name
                     component-type
                     namespace
-                    defined-in-file
                     line-number] :as meta-data}
             (hc/get-component-meta-data :ux.buttons/cancel-button)]
 
         (is (= '(:element-name
                  :component-type
                  :namespace
-                 :defined-in-file
                  :line-number) (keys  meta-data)))
         (is (= :ux.buttons/cancel-button element-name))
         (is (= "function" component-type))
         (is (= "ten_d_c.hiccup_server_components.core_test" namespace))
-        (is (string/ends-with?
-             defined-in-file
-             "hiccup-server-components/test/ten_d_c/hiccup_server_components/core_test.clj"))
-        (is (= 15 line-number))))
+        (is (= 16 line-number))))
 
 
     (testing "Component type"

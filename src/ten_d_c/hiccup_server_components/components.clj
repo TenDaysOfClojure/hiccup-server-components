@@ -135,7 +135,6 @@
   | `:element-name`    | The qualified keyword representing the element name.
   | `:component-type`  | Can be either `function`, `vector` or `string`.
   | `:namespace`       | The clojure namespace the component was registered in.
-  | `:defined-in-file` | The file path that the component is registered.
   | `:line-number`     | The line number where the component is registered."
   [element-name component]
 
@@ -159,7 +158,6 @@
     {:element-name element-name
      :component-type component-type
      :namespace code-namespace
-     :defined-in-file *file*
      :line-number line-number}))
 
 
