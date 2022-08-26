@@ -124,7 +124,11 @@ Hiccup server components allows developers to represent web pages and user inter
 
 ```
 
-Which would result the following HTML:
+Which would produce the following web page:
+
+![](https://tendaysofclojure.github.io/hiccup-server-components-api-docs/images/login-screen.png)
+
+With the following HTML:
 
 ```html
 <html>
