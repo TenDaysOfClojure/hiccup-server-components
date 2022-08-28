@@ -385,25 +385,41 @@
 
 
 (defn css-classes
-  "Convenience function for contructing 'class' attributes of HTML elements.
+  "Constructs a list of css classes that can be used as the 'class' attribute
+  of HTML elements.
 
-   Takes a variable list of `classes` which can be keywords, strings, nil or
-   empty strings and contructs a consistent space seperated string that
-   represents the css classes of an HTML element.
+  Optionally, if the first parameter is a map, it will be used for variable
+  substitution in subsequent parameters which represent css classes.
 
-  Keywords and strings can be space, comma or period seperated and will be
-  expanded into seperate css classes.
+  ```clojure
+  ;; `{{colour}}` will be substituted with \"red\"
+  (css-classes {:colour \"red\"}
+               \"bg-{{colour}}-400 text-{{colour}}-600\")
 
-  Ignores nil values and blank strings, allowing for conditional contruction of
+  ;; `<colour>` will be substituted with \"red\"
+  (css-classes {:colour \"red\"}
+               :bg-<colour>-400.text-<colour>-600)
+  ```
+
+  Supports same options as [[string-template]] for variable substitution.
+
+  The variable list of css classes provided as subsequent parameters can be
+  keywords (single or period seperated) or strings (space, comma or period
+  seperated) and result in a consistent, space seperated string that
+  represents the css classes of an HTML element.
+
+  Ignores nils and blank strings allowing for conditional contruction of
   css classes.
-
-  Useful for contructing 'class' attributes of HTML elements.
 
   Examples:
 
   ```clojure
   ;; Dot seperated keyword
   (css-classes :one.two.three) ;; => \"one two three\"
+
+   (css-classes :one.two.three
+                :four.five
+                \"six seven\") ;; => \"one two three four five six seven\"
 
   ;; Dot seperated string
   (css-classes \"one.two.three\") ;; => \"one two three\"
@@ -447,5 +463,64 @@
 
   ;; => \"<div class=\"alert error-alert\">This is a test</div>\"
   ```"
-  [& classes]
-  (apply markup-helpers/css-classes classes))
+  [& options-and-classes]
+  (apply markup-helpers/css-classes options-and-classes))
+
+
+(defn string-template
+  "Returns a string where interpolated variables are replaced using values in
+  the map provided by `variables` allowing for templated strings.
+
+  Interpolated variables can be tags enclosed as follows (where `my-value` is
+  the name of the variable to replace):
+
+  - `\"Hello {{my-value}}\"`
+  - `\"Hello {my-value}\"`
+  - `\"Hello <<my-value>>\"`
+  - `\"Hello <my-value>\"`
+  - `\"Hello !!my-value!!\"`
+  - `\"Hello !my-value!\"`
+  - `\"Hello $$my-value$$\"`
+  - `\"Hello $my-value$\"`
+
+  Examples:
+
+  ```clojure
+  ;; All examples below result in the following string being returned:
+
+  ;; =>> \"Hello Bob Smith your email address is bobsmith@mailinator.com\"]
+
+  (string-template
+    {:name \"Bob Smith\" :email-address \"bobsmith@mailinator.com\"}
+    \"Hello {{name}} your email address is {{email-address}}\")
+
+  (string-template
+    {:name \"Bob Smith\" :email-address \"bobsmith@mailinator.com\"}
+    \"Hello {name} your email address is {email-address}\")
+
+  (string-template
+    {:name \"Bob Smith\" :email-address \"bobsmith@mailinator.com\"}
+    \"Hello <<name>> your email address is <<email-address>>\")
+
+  (string-template
+    {:name \"Bob Smith\" :email-address \"bobsmith@mailinator.com\"}
+    \"Hello <name> your email address is <email-address>\")
+
+  (string-template
+    {:name \"Bob Smith\" :email-address \"bobsmith@mailinator.com\"}
+    \"Hello !!name!! your email address is !!email-address!!\")
+
+  (string-template
+    {:name \"Bob Smith\" :email-address \"bobsmith@mailinator.com\"}
+    \"Hello !name! your email address is !email-address!\")
+
+  (string-template
+    {:name \"Bob Smith\" :email-address \"bobsmith@mailinator.com\"}
+    \"Hello $$name$$ your email address is $$email-address$$\")
+
+  (string-template
+    {:name \"Bob Smith\" :email-address \"bobsmith@mailinator.com\"}
+    \"Hello $name$ your email address is $email-address$\"))
+  ```"
+  [variables string-template]
+  (markup-helpers/string-template variables string-template))
