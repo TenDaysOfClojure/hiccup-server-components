@@ -87,16 +87,19 @@
       (let [{:keys [element-name
                     component-type
                     namespace
+                    file-name
                     line-number] :as meta-data}
             (hc/get-component-meta-data :ux.buttons/primary-button)]
 
         (is (= '(:element-name
                  :component-type
                  :namespace
+                 :file-name
                  :line-number) (keys meta-data)))
         (is (= :ux.buttons/primary-button element-name))
         (is (= "function" component-type))
         (is (= "ten_d_c.hiccup_server_components.core_test" namespace))
+        (is (= "core_test.clj" file-name))
         (is (= 8 line-number))))
 
 
@@ -105,16 +108,19 @@
       (let [{:keys [element-name
                     component-type
                     namespace
+                    file-name
                     line-number] :as meta-data}
             (hc/get-component-meta-data :ux.buttons/cancel-button)]
 
         (is (= '(:element-name
                  :component-type
                  :namespace
+                 :file-name
                  :line-number) (keys  meta-data)))
         (is (= :ux.buttons/cancel-button element-name))
         (is (= "function" component-type))
         (is (= "ten_d_c.hiccup_server_components.core_test" namespace))
+        (is (= "core_test.clj" file-name))
         (is (= 16 line-number))))
 
 

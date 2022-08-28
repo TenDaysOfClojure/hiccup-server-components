@@ -135,6 +135,7 @@
   | `:element-name`    | The qualified keyword representing the element name.
   | `:component-type`  | Can be either `function`, `vector` or `string`.
   | `:namespace`       | The clojure namespace the component was registered in.
+  | `:file-name`       | The file name where the component was registered in.
   | `:line-number`     | The line number where the component is registered."
   [element-name component]
 
@@ -151,15 +152,13 @@
                                   "string")
 
         code-namespace      (stack-trace-element->namespace
-                             stack-trace-element)
-
-        line-number         (.getLineNumber stack-trace-element)]
+                             stack-trace-element)]
 
     {:element-name element-name
      :component-type component-type
      :namespace code-namespace
-     :line-number line-number}))
-
+     :file-name (.getFileName stack-trace-element)
+     :line-number (.getLineNumber stack-trace-element)}))
 
 ;; -- Public API --
 
