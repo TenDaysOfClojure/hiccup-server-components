@@ -385,23 +385,45 @@
 
 
 (defn css-classes
-  "Constructs a list of css classes that can be used as the 'class' attribute
+  "Constructs a list of css classes that can be used as the \"class\" attribute
   of HTML elements.
 
   Optionally, if the first parameter is a map, it will be used for variable
   substitution in subsequent parameters which represent css classes.
+
+  Variable substitution supports the same options as the [[string-template]]
+  function.
+
+  Example with variable substitution:
 
   ```clojure
   ;; `{{colour}}` will be substituted with \"red\"
   (css-classes {:colour \"red\"}
                \"bg-{{colour}}-400 text-{{colour}}-600\")
 
+  ;; => \"bg-red-400 text-red-600\"
+
+
   ;; `<colour>` will be substituted with \"red\"
   (css-classes {:colour \"red\"}
                :bg-<colour>-400.text-<colour>-600)
+
+  ;; => \"bg-red-400 text-red-600\"
   ```
 
-  Supports same options as [[string-template]] for variable substitution.
+ Example without variable substitution:
+
+  ```clojure
+  ;; `{{colour}}` will be substituted with \"red\"
+  (css-classes \"bg-red-400\" \"text-red-600\")
+
+  ;; => \"bg-red-400 text-red-600\"
+
+  ;; `<colour>` will be substituted with \"red\"
+  (css-classes :bg-red-400.text-red-600)
+
+  ;; => \"bg-red-400 text-red-600\"
+  ```
 
   The variable list of css classes provided as subsequent parameters can be
   keywords (single or period seperated) or strings (space, comma or period

@@ -2,51 +2,55 @@
   (:require [clojure.string :as string]))
 
 
-(defn replacement-pattern [& parts]
-  (apply str parts))
+(defn- escape-replacement-part [string-part]
+  (->> (string/split string-part #"")
+       (map #(str "\\" %))
+       (string/join)))
 
 
-(defn string-template [vars content]
+(defn- replacement-pattern [start-tag value end-tag]
+  (str (escape-replacement-part start-tag)
+       (name value)
+       (escape-replacement-part end-tag)))
+
+
+(defn- build-replacement-pattern [tags variable-name]
+  (let [var-name (-> (name variable-name)
+                     (string/escape {\? "\\?"
+                                     \! "\\!"
+                                     \* "\\*"}))]
+    (->> tags
+         (map (fn [[start-tag end-tag]]
+                (replacement-pattern
+                 start-tag var-name end-tag)))
+         (string/join "|")
+         (re-pattern))))
+
+
+(defn string-template [variables content]
   (reduce
-   (fn [updated-content [var value]]
-     (let [;; Cater for question marks in the variable name :display-legend?
-           var-name           (-> (name var)
-                                  (string/escape {\? "\\?"
-                                                  \! "\\!"
-                                                  \* "\\*"}))
+   (fn [updated-content [variable-name value]]
+     (let [replacement-pattern (build-replacement-pattern
+                                [["{{" "}}"]
+                                 ["{" "}"]
+
+                                 ["<<" ">>"]
+                                 ["<" ">"]
+
+                                 ["!!" "!!"]
+                                 ["!" "!"]
+
+                                 ["$$" "$$"]
+                                 ["$" "$"]]
+                                variable-name)
 
            substitute-value    (if (keyword? value)
-                                 (name var)
-                                 (str value))
+                                 (name value)
+                                 (str value))]
 
-           replacement-pattern (re-pattern
-                                (string/join
-                                 "|"
-                                 [(replacement-pattern
-                                   "\\{\\{" var-name "\\}\\}")
-
-                                  (replacement-pattern
-                                   "\\{" var-name "\\}")
-
-                                  (replacement-pattern
-                                   "\\<\\<" var-name "\\>\\>")
-                                  (replacement-pattern
-                                   "\\<" var-name "\\>")
-
-                                  (replacement-pattern
-                                   "\\!\\!" var-name "\\!\\!")
-                                  (replacement-pattern
-                                   "\\!" var-name "\\!")
-
-                                  (replacement-pattern
-                                   "\\$\\$" var-name "\\$\\$")
-                                  (replacement-pattern
-                                   "\\$" var-name "\\$")]))]
-
-       (string/replace updated-content replacement-pattern
-                       substitute-value)))
+       (string/replace updated-content replacement-pattern substitute-value)))
    content
-   vars))
+   variables))
 
 
 (defn css-classes [& options-and-classes]
