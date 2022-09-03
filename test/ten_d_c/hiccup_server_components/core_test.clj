@@ -20,53 +20,58 @@
       text])))
 
 
+(defn assert-no-user-defined-components []
+  (is (empty?
+       (hc/user-defined-components))))
+
+
 (deftest core-test
 
   (testing "all-components"
 
     (hc/clear-components)
 
-    (is (empty? (hc/all-components)))
+    (assert-no-user-defined-components)
 
     (register-primary-button)
 
-    (is (= 1 (count (hc/all-components))))
+    (is (= 1 (count (hc/user-defined-components))))
 
     (is (= :ux.buttons/primary-button
-           (:element-name (first (hc/all-components)))))
+           (:element-name (first (hc/user-defined-components)))))
 
     (register-cancel-button)
 
-    (is (= 2 (count (hc/all-components))))
+    (is (= 2 (count (hc/user-defined-components))))
 
     (is (= '(:ux.buttons/cancel-button :ux.buttons/primary-button)
            (sort
-            (map :element-name (hc/all-components))))))
+            (map :element-name (hc/user-defined-components))))))
 
 
   (testing "clear-components"
 
     (hc/clear-components)
 
-    (is (empty? (hc/all-components)))
+    (assert-no-user-defined-components)
 
     (hc/reg-component :ux.buttons/primary-button
                       (fn [{:keys [text] :as options}]
                         [:button.primary (dissoc options :text)
                          text]))
 
-    (is (= 1 (count (hc/all-components))))
+    (is (= 1 (count (hc/user-defined-components))))
 
     (hc/reg-component :ux.buttons/cancel-button
                       (fn [{:keys [text] :as options}]
                         [:button.cancel (dissoc options :text)
                          text]))
 
-    (is (= 2 (count (hc/all-components))))
+    (is (= 2 (count (hc/user-defined-components))))
 
     (hc/clear-components)
 
-    (is (empty? (hc/all-components))))
+    (assert-no-user-defined-components))
 
 
   (testing "get-component-meta-data"
@@ -149,7 +154,7 @@
 
     (hc/clear-components)
 
-    (is (empty? (hc/all-components)))
+    (assert-no-user-defined-components)
 
     (is (= {:element-name :ux.buttons/primary-button}
            (hc/get-component-meta-data :ux.buttons/primary-button)))
@@ -164,7 +169,7 @@
          (nil? (hc/get-component-meta-data :ux.buttons/primary-button))))
 
     (is (= '(:ux.buttons/primary-button)
-           (map :element-name (hc/all-components))))
+           (map :element-name (hc/user-defined-components))))
 
     (is (= {:element-name :ux.buttons/cancel-button}
            (hc/get-component-meta-data :ux.buttons/cancel-button)))
@@ -180,4 +185,4 @@
 
     (is (= '(:ux.buttons/cancel-button :ux.buttons/primary-button)
            (sort
-            (map :element-name (hc/all-components)))))))
+            (map :element-name (hc/user-defined-components)))))))

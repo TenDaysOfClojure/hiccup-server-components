@@ -225,6 +225,11 @@
        (sort-by :element-name)))
 
 
+(defn user-defined-components []
+  (filter #(nil? (:hsc/built-in? %))
+          (all-components)))
+
+
 (defn extract-arity-message [ex]
   (-> (.getMessage ex)
       (string/split #"\:")

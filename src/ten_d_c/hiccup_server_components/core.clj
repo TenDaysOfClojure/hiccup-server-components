@@ -33,9 +33,16 @@
 ;; -- Public API --
 
 (defn all-components
-  "Lists all registered components and their associated metadata"
+  "Lists all registered components (built in and user defined) and their
+  associated metadata"
   []
   (components/all-components))
+
+
+(defn user-defined-components
+  "Lists all user defined components and their associated metadata"
+  []
+  (components/user-defined-components))
 
 
 (defn clear-components
@@ -274,7 +281,7 @@
    rendered by the browser. Used for including strings that contain HTML markup
    that should not be escaped."
    [& html]
-   (hiccup/raw (string/join html)))
+   (apply markup-helpers/raw-html html))
 
 
  (defn javascript
@@ -282,7 +289,7 @@
    javascript to be executed by the browser. Used for including executable
    javascript in Hiccup data."
    [& javascript]
-   (hiccup/raw (string/join javascript)))
+   (apply markup-helpers/javascript javascript))
 
 
 (defn wrap-response-middleware

@@ -19,8 +19,7 @@
   (testing "HTML 5 Doc"
     (hc/clear-components)
 
-    (assert-built-in-component-exists
-     :ux/html5-doc)
+    (assert-built-in-component-exists :ux/html5-doc)
 
     (let [html-document      [:ux/html5-doc
                               [:head
@@ -76,8 +75,7 @@
 
     (hc/clear-components)
 
-    (assert-built-in-component-exists
-     :ux/fragment)
+    (assert-built-in-component-exists :ux/fragment)
 
 
     (hc/reg-component
@@ -150,4 +148,77 @@
             [:div
              [:table
               [:thead [:ux/thead-fragment]]
-              [:tbody [:ux/tbody-fragment]]]])))))
+              [:tbody [:ux/tbody-fragment]]]]))))
+
+
+  (testing "Javascript"
+
+    (hc/clear-components)
+
+    (assert-built-in-component-exists :ux/javascript)
+
+    (let [js (hc/->hiccup [:ux/javascript "alert('Hello world')"])]
+
+      (is (= hiccup.util.RawString (type js)))
+
+      (is (= "alert('Hello world')" (str js))))
+
+
+    (let [js (hc/->hiccup
+              [:ux/javascript
+               "document.addEventListener('readystatechange', event => {
+                  console.log('Document ready state changed');
+                });"])]
+
+      (is (= hiccup.util.RawString (type js)))
+
+      (is (= (str "document.addEventListener('readystatechange', event =>"
+                  " { console.log('Document ready state changed'); });")
+             (str js))))
+
+
+    (let [js (hc/->hiccup [:ux/javascript
+                           "alert('one');"
+                           "alert('two');"
+                           "alert('three');"])]
+
+      (is (= hiccup.util.RawString (type js)))
+
+      (is (= "alert('one');alert('two');alert('three');" (str js)))))
+
+
+  (testing "Execute Javascript"
+
+    (hc/clear-components)
+
+    (assert-built-in-component-exists :ux/execute-javascript)
+
+    (let [[script-tag js] (hc/->hiccup
+                           [:ux/execute-javascript "alert('Hello world')"])]
+
+      (is (= :script script-tag))
+      (is (= hiccup.util.RawString (type js)))
+      (is (= "alert('Hello world')" (str js))))
+
+
+    (let [[script-tag js] (hc/->hiccup
+                           [:ux/execute-javascript
+                            "document.addEventListener('readystatechange', event => {
+                               console.log('Document ready state changed');
+                            });"])]
+
+      (is (= :script script-tag))
+      (is (= hiccup.util.RawString (type js)))
+      (is (= (str "document.addEventListener('readystatechange', event =>"
+                  " { console.log('Document ready state changed'); });")
+             (str js))))
+
+
+    (let [[script-tag js] (hc/->hiccup [:ux/execute-javascript
+                                        "alert('one');"
+                                        "alert('two');"
+                                        "alert('three');"])]
+
+      (is (= :script script-tag))
+      (is (= hiccup.util.RawString (type js)))
+      (is (= "alert('one');alert('two');alert('three');" (str js))))))

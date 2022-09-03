@@ -1,5 +1,6 @@
 (ns ^:no-doc ten-d-c.hiccup-server-components.markup-helpers
-  (:require [clojure.string :as string]))
+  (:require [clojure.string :as string]
+            [hiccup2.core :as hiccup]))
 
 
 (defn- escape-replacement-part [string-part]
@@ -25,6 +26,18 @@
                  start-tag var-name end-tag)))
          (string/join "|")
          (re-pattern))))
+
+
+(defn raw-html [& html]
+  (hiccup/raw (string/join html)))
+
+
+(defn javascript [& javascript]
+  (let [sanitised (-> javascript
+                      (string/join)
+                      (string/replace #"\s+\n+\s+|\n+\s+|\s+\n+|\n+" " "))]
+    (hiccup/raw sanitised)))
+
 
 
 (defn string-template [variables content]
