@@ -176,8 +176,17 @@
 (defn clear-components []
   "Clears all components and associated meta-data that where
    registered using `->reg-component`"
-  (reset! global-components {})
-  (reset! global-component-metadata {}))
+  (let [built-in-components (->> @global-component-metadata
+                                 (filter (fn [[element-name metadata]]
+                                           (true? (:hsc/built-in? metadata))))
+                                 (map first))
+
+        clear-function      #(select-keys % built-in-components)]
+
+    (swap! global-components clear-function)
+    (swap! global-component-metadata clear-function)
+
+    true))
 
 
 (defn adjusted-component [meta-data component]
