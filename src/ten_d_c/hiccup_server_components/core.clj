@@ -276,20 +276,32 @@
    (component-stats/component-counts all-components)))
 
 
- (defn raw-html
-   "Converts provided `html` into an unescaped string, allowing the HTML to be
-   rendered by the browser. Used for including strings that contain HTML markup
-   that should not be escaped."
-   [& html]
-   (apply markup-helpers/raw-html html))
+(defn raw-html
+  "**Warning:** Never provide strings that come from external sources or user
+   defined input as they could include malicious JavaScript and cause cross-site
+   scripting (XSS) attacks - those strings should remain escaped.
+
+   Since by default all strings are escaped, this component converts the provided
+   `html` into an unescaped string, allowing the HTML to be rendered by the
+   browser.
+
+   Used for including strings that contain HTML markup that should not be
+   escaped and should be rendered by the browser."
+  [& html]
+  (apply markup-helpers/raw-html html))
 
 
- (defn javascript
-   "Converts provided `javascript` into an unescaped string, allowing the
-   javascript to be executed by the browser. Used for including executable
-   javascript in Hiccup data."
-   [& javascript]
-   (apply markup-helpers/javascript javascript))
+(defn javascript
+  "**Warning:** Never provide strings that come from external sources or user
+   defined input as they could include malicious JavaScript and cause cross-site
+   scripting (XSS) attacks - those strings should remain escaped.
+
+   Converts provided `javascript` into an unescaped string, allowing the
+   javascript to be executed by the browser.
+
+   Used for including executable javascript in Hiccup data."
+  [& javascript]
+  (apply markup-helpers/javascript javascript))
 
 
 (defn wrap-response-middleware

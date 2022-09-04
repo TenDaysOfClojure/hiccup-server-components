@@ -2,7 +2,9 @@
   (:require [ten-d-c.hiccup-server-components.components :as components]
             [hiccup2.core :as hiccup]
             [ten-d-c.hiccup-server-components.markup-helpers
-             :as markdown-helpers]))
+             :as markdown-helpers]
+            [ten-d-c.hiccup-server-components.markup-helpers :as markup-helpers]
+            [ten-d-c.hiccup-server-components.core :as hc]))
 
 
 (components/reg-component
@@ -55,8 +57,14 @@
 
 (components/reg-component
  :ux/javascript
- {:doc "Converts provided `javascript-lines` into an unescaped string, allowing the
+ {:doc
+  "**Warning:** Never provide strings that come from external sources or user
+   defined input as they could include malicious JavaScript and cause cross-site
+   scripting (XSS) attacks - those strings should remain escaped.
+
+   Converts provided `javascript-lines` into an unescaped string, allowing the
    javascript to be executed by the browser if wrapped in a <script> tag.
+
    Used for including executable javascript in Hiccup data."
 
   :examples {"Single line" [:ux/javascript
@@ -71,9 +79,15 @@
 
 (components/reg-component
  :ux/execute-javascript
- {:doc "Converts provided `javascript-lines` into an unescaped string and wraps
-       it in a <script> tag, executing the javascript in the web browser.
-       Used for including executable javascript in Hiccup data."
+ {:doc
+  "**Warning:** Never provide strings that come from external sources or user
+   defined input as they could include malicious JavaScript and cause cross-site
+   scripting (XSS) attacks - those strings should remain escaped.
+
+   Converts provided `javascript-lines` into an unescaped string and wraps
+   it in a <script> tag, executing the javascript in the web browser.
+
+   Used for including executable javascript in Hiccup data."
 
   :examples {"Single line" [:ux/javascript
                             "alert('Hello world');"]
@@ -88,10 +102,25 @@
     (apply markdown-helpers/javascript javascript-lines)]))
 
 
-#_(components/reg-component
+(components/reg-component
  :ux/html
- {:hsc/built-in? true}
- hc/raw-html)
+ {:doc
+  "**Warning:** Never provide strings that come from external sources or user
+   defined input as they could include malicious JavaScript and cause cross-site
+   scripting (XSS) attacks - those strings should remain escaped.
+
+   Since by default all strings are escaped, this component converts the provided
+   `html` into an unescaped string, allowing the HTML to be rendered by the
+   browser.
+
+   Used for including strings that contain HTML markup that should not be
+   escaped and should be rendered by the browser."
+
+  :example [:ux/html
+            "This is a <strong>test</strong> with <em>embeded html</em>."]
+
+  :hsc/built-in? true}
+ markup-helpers/raw-html)
 
 
 #_(components/reg-component
@@ -111,30 +140,22 @@
  hc/string-template)
 
 
-#_(ten-d-c.hiccup-server-components.core/->html-file
+(let [element-name :ux/html
+
+      metadata     (hc/get-component-meta-data
+                    element-name)]
+
+  (ten-d-c.hiccup-server-components.core/->html-file
    "/Users/ghostdog/Desktop/frag.html"
    [:ux/html5-doc
     [:head
-     [:title "Hello"]]
+     [:title "Examples " (str (:element-name metadata))]]
     [:body
 
-     [:ux/execute-javascript
-      "document.addEventListener('readystatechange', event => {
-        console.log('Document ready state changed');
-      });"]
+     (when-let [example (:example metadata)]
+       [:ux/fragment
+        example
+        [:hr]])
 
-     #_[:div {:class [:ux/css-classes
-                      {:colour "red"}
-                      :bg-<colour>-300.text-<colour>-600
-                      :one.two :three :four.five]} "Hi"]
-     #_[:ux/html "Hello <b>WORLD</b> <i>Italics</i>"]
-     #_[:ux/html
-        [:ux/string-template
-         {:name "FGuilio" :email-address "dasda@ds.net"}
-         "Helllo {{name}} your email address is <b>!!email-address!!</b>"]]
-     ;;[:ux/execute-javascript "alert('ddd')"]
-     #_[:div
-        [:ux/fragment
-         [:p "one"]
-         [:p "Two"]
-         [:p "Three"]]]]])
+     (when-let [examples (:examples metadata)]
+       examples)]]))

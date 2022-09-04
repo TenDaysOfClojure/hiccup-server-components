@@ -221,4 +221,24 @@
 
       (is (= :script script-tag))
       (is (= hiccup.util.RawString (type js)))
-      (is (= "alert('one');alert('two');alert('three');" (str js))))))
+      (is (= "alert('one');alert('two');alert('three');" (str js)))))
+
+
+  (testing "HTML"
+
+    (hc/clear-components)
+
+    (assert-built-in-component-exists :ux/html)
+
+    (let [html "Hello world <strong>this is a test</strong>"]
+
+      (testing "Escaped by default"
+
+        (is (= "<div>Hello world &lt;strong&gt;this is a test&lt;/strong&gt;</div>"
+               (hc/->html [:div html]))))
+
+      (testing "Unescaped"
+
+        (is (= "<div>Hello world <strong>this is a test</strong></div>"
+               (hc/->html [:div
+                           [:ux/html html]])))))))
