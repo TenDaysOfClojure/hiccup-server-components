@@ -96,6 +96,12 @@
     (is (= "one two three"
            (markup-helpers/css-classes "one    two     three")))
 
+    (is (= "one two three"
+           (markup-helpers/css-classes
+            "one
+             two
+
+             three")))
 
     (is (= "one two three"
            (markup-helpers/css-classes "one,two,three")))

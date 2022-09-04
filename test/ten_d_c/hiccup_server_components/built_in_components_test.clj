@@ -16,7 +16,8 @@
 
 (deftest built-in-components-test
 
-  (testing "HTML 5 Doc"
+  (testing ":ux/html5-doc"
+
     (hc/clear-components)
 
     (assert-built-in-component-exists :ux/html5-doc)
@@ -71,12 +72,11 @@
                (hc/->html html-document))))))
 
 
-  (testing "Fragment"
+  (testing ":ux/fragment"
 
     (hc/clear-components)
 
     (assert-built-in-component-exists :ux/fragment)
-
 
     (hc/reg-component
      :ux/paragraph-fragment
@@ -151,7 +151,7 @@
               [:tbody [:ux/tbody-fragment]]]]))))
 
 
-  (testing "Javascript"
+  (testing ":ux/javascript"
 
     (hc/clear-components)
 
@@ -187,7 +187,7 @@
       (is (= "alert('one');alert('two');alert('three');" (str js)))))
 
 
-  (testing "Execute Javascript"
+  (testing ":ux/execute-javascript"
 
     (hc/clear-components)
 
@@ -224,7 +224,7 @@
       (is (= "alert('one');alert('two');alert('three');" (str js)))))
 
 
-  (testing "HTML"
+  (testing ":ux/html"
 
     (hc/clear-components)
 
@@ -241,4 +241,71 @@
 
         (is (= "<div>Hello world <strong>this is a test</strong></div>"
                (hc/->html [:div
-                           [:ux/html html]])))))))
+                           [:ux/html html]]))))))
+
+
+  (testing ":ux/css-classes"
+
+    (hc/clear-components)
+
+    (assert-built-in-component-exists :ux/css-classes)
+
+    (let [expected-output [:div {:class "one two three"}
+                           "This is a test"]]
+      (is (= expected-output
+             (hc/->hiccup
+              [:div {:class [:ux/css-classes :one.two.three]}
+               "This is a test"])))
+
+      (is (= expected-output
+             (hc/->hiccup
+              [:div {:class [:ux/css-classes :one :two :three]}
+               "This is a test"]))))
+
+    (is (= [:div
+            {:class "one two three four five six seven eight"}
+            "This is a test"]
+           (hc/->hiccup
+            [:div {:class [:ux/css-classes
+                           [:one.two.three]
+                           :four
+                           nil
+                           :five
+                           [:six "seven" "eight"]
+                           ""
+                           nil]}
+             "This is a test"])))
+
+    (is (= [:div {:class "bg-red-300 text-blue-500"}
+            "This is a test"]
+           (hc/->hiccup
+            [:div {:class [:ux/css-classes
+                           {:bg-colour "red" :text-colour "blue"}
+                           :bg-<bg-colour>-300.text-<text-colour>-500]}
+             "This is a test"])))
+
+    (is (= [:div {:class "bg-stone-400 text-stone-600 text-white"}
+            "This is a test"]
+           (hc/->hiccup
+            [:div {:class
+                   [:ux/css-classes
+                    {:colour :stone
+                     :text-colour :white
+                     :light-number 400
+                     :dark-number 600}
+                    "bg-stone-{{light-number}} text-stone-{{dark-number}} text-white"]}
+             "This is a test"])))
+
+
+    (is (= [:div
+            {:class
+             "bg-red-300 text-red-500 bg-red-300 text-red-400 hover:text-red-500"}
+            "This is a test"]
+           (hc/->hiccup
+            [:div {:class
+                   [:ux/css-classes
+                    {:colour "red" :light-number 300 :darker-number 500}
+                    :bg-<colour>-<light-number>.text-<colour>-<darker-number>
+                    "bg-{{colour}}-300 text-{{colour}}-400"
+                    "hover:text-<colour>-500"]}
+             "This is a test"])))))

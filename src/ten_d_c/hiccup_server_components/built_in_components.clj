@@ -9,8 +9,9 @@
 
 (components/reg-component
  :ux/html5-doc
- {:doc "An HTML 5 document with the correct DOCTYPE with the given `document`
-        representing child elements (e.g head, body) of the <html> tag."
+ {:doc
+  "An HTML 5 document with the correct DOCTYPE with the given `document`
+   representing child elements (e.g head, body) of the <html> tag."
 
   :example [:ux/html5-doc
             [:head
@@ -123,9 +124,75 @@
  markup-helpers/raw-html)
 
 
-#_(components/reg-component
+(components/reg-component
  :ux/css-classes
- {:hsc/built-in? true}
+ {:doc
+  "Constructs a list of css classes that can be used as the \"class\" attribute
+   of HTML elements.
+
+   Optionally, if the first parameter is a map, it will be used for variable
+   substitution in subsequent parameters which represent css classes.
+
+   Variable substitution supports the same options as the [[string-template]]
+   function.
+
+   The variable list of css classes provided as subsequent parameters can be
+   keywords (single or period seperated) or strings (space, comma or period
+   seperated) and result in a consistent, space separated string that represents
+   the css classes of an HTML element.
+
+   Ignores nils and blank strings allowing for conditional construction of
+   css classes."
+
+  :examples {"Space seperated keywords"
+             [:div
+              {:class [:ux/css-classes :one :two :three]}
+              "This is a test"]
+
+             "Dot seperated keywords"
+             [:div
+              {:class [:ux/css-classes :one.two.three.four]}
+              "This is a test"]
+
+             "Space seperated strings"
+             [:div
+              {:class [:ux/css-classes "one two three"]}
+              "This is a test"]
+
+             "Dot seperated strings"
+             [:div
+              {:class [:ux/css-classes "one.two.three.four"]}
+              "This is a test"]
+
+             "Multiple strings"
+             [:div
+              {:class [:ux/css-classes
+                       "one" "two" "three"]}
+              "This is a test"]
+
+             "Multiple dot seperated keywords"
+             [:div
+              {:class [:ux/css-classes
+                       :one.two.three.four
+                       :five.six.seven]}
+              "This is a test"]
+
+
+             "Variable substituion with keywords"
+             [:div
+              {:class [:ux/css-classes
+                       {:colour "red"}
+                       :bg-<colour>-300.text-<colour>-600]}
+              "This is a test"]
+
+             "Variable substituion with strings"
+             [:div
+              {:class [:ux/css-classes
+                       {:colour "blue"}
+                       "bg-{{colour}}-300 text-{{colour}}-600 shadow-{{colour}}"]}
+              "This is a test"]}
+
+  :hsc/built-in? true}
  hc/css-classes)
 
 
@@ -140,7 +207,7 @@
  hc/string-template)
 
 
-(let [element-name :ux/html
+(let [element-name :ux/css-classes
 
       metadata     (hc/get-component-meta-data
                     element-name)]
@@ -158,4 +225,8 @@
         [:hr]])
 
      (when-let [examples (:examples metadata)]
-       examples)]]))
+       (for [[title example] examples]
+         [:ux/fragment
+          [:h4 title]
+          example
+          [:hr]]))]]))

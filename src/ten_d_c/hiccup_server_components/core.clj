@@ -446,10 +446,10 @@
 
   The variable list of css classes provided as subsequent parameters can be
   keywords (single or period seperated) or strings (space, comma or period
-  seperated) and result in a consistent, space seperated string that
+  seperated) and result in a consistent, space separated string that
   represents the css classes of an HTML element.
 
-  Ignores nils and blank strings allowing for conditional contruction of
+  Ignores nils and blank strings allowing for conditional construction of
   css classes.
 
   Examples:
