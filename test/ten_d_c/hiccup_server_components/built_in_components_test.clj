@@ -308,4 +308,29 @@
                     :bg-<colour>-<light-number>.text-<colour>-<darker-number>
                     "bg-{{colour}}-300 text-{{colour}}-400"
                     "hover:text-<colour>-500"]}
-             "This is a test"])))))
+             "This is a test"]))))
+
+
+  (testing ":ux/string-template"
+
+    (hc/clear-components)
+
+    (assert-built-in-component-exists :ux/css-classes)
+
+    (let [expected-output [:div
+                           "Your name is Bob Smith and your email address is bobsmith@mailinator.com"]]
+      (is
+       (= expected-output
+          (hc/->hiccup
+           [:div
+            [:ux/string-template
+             {:name "Bob Smith" :email-address "bobsmith@mailinator.com"}
+             "Your name is {{name}} and your email address is {{email-address}}"]])))
+
+      (is
+       (= expected-output
+          (hc/->hiccup
+           [:div
+            [:ux/string-template
+             {:name "Bob Smith" :email-address "bobsmith@mailinator.com"}
+             "Your name is <name> and your email address is <email-address>"]]))))))

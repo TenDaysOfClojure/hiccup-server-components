@@ -1,10 +1,7 @@
 (ns ten-d-c.hiccup-server-components.built-in-components
   (:require [ten-d-c.hiccup-server-components.components :as components]
-            [hiccup2.core :as hiccup]
             [ten-d-c.hiccup-server-components.markup-helpers
-             :as markdown-helpers]
-            [ten-d-c.hiccup-server-components.markup-helpers :as markup-helpers]
-            [ten-d-c.hiccup-server-components.core :as hc]))
+             :as markup-helpers]))
 
 
 (components/reg-component
@@ -22,9 +19,10 @@
   :hsc/built-in? true}
  (fn [& document]
    (list
-    (hiccup/raw "<!DOCTYPE html>")
+    (markup-helpers/raw-html "<!DOCTYPE html>")
     [:html document])))
 
+markup-helpers/raw-html
 
 (components/reg-component
  :ux/fragment
@@ -75,7 +73,7 @@
                                "alert('Hello world');"
                                "alert('Goodbye world');"]}
   :hsc/built-in? true}
- markdown-helpers/javascript)
+ markup-helpers/javascript)
 
 
 (components/reg-component
@@ -100,7 +98,7 @@
   :hsc/built-in? true}
  (fn [& javascript-lines]
    [:script
-    (apply markdown-helpers/javascript javascript-lines)]))
+    (apply markup-helpers/javascript javascript-lines)]))
 
 
 (components/reg-component
@@ -193,40 +191,36 @@
               "This is a test"]}
 
   :hsc/built-in? true}
- hc/css-classes)
+ markup-helpers/css-classes)
 
 
-#_(components/reg-component
+(components/reg-component
  :ux/string-template
- {:hsc/built-in? true}
- hc/string-template)
+ {:doc
+  "Returns a string where interpolated variables are replaced using values in
+  the map provided by `variables` allowing for templated strings.
+
+  Interpolated variables can be tags enclosed as follows (where `my-value` is
+  the name of the variable to replace):
+
+  - `\"Hello {{my-value}}\"`
+  - `\"Hello {my-value}\"`
+  - `\"Hello <<my-value>>\"`
+  - `\"Hello <my-value>\"`
+  - `\"Hello !!my-value!!\"`
+  - `\"Hello !my-value!\"`
+  - `\"Hello $$my-value$$\"`
+  - `\"Hello $my-value$\"`"
+
+  :example [:ux/string-template
+            {:name "Bob" :email-address "bobsmith@mailinator.com"}
+            "Hello {{name}}, your email address is {{email-address}}"]
+
+  :hsc/built-in? true}
+ markup-helpers/string-template)
+
 
 #_(components/reg-component
- :ux/html-template
- {:hsc/built-in? true}
- hc/string-template)
-
-
-(let [element-name :ux/css-classes
-
-      metadata     (hc/get-component-meta-data
-                    element-name)]
-
-  (ten-d-c.hiccup-server-components.core/->html-file
-   "/Users/ghostdog/Desktop/frag.html"
-   [:ux/html5-doc
-    [:head
-     [:title "Examples " (str (:element-name metadata))]]
-    [:body
-
-     (when-let [example (:example metadata)]
-       [:ux/fragment
-        example
-        [:hr]])
-
-     (when-let [examples (:examples metadata)]
-       (for [[title example] examples]
-         [:ux/fragment
-          [:h4 title]
-          example
-          [:hr]]))]]))
+   :ux/html-template
+   {:hsc/built-in? true}
+   hc/string-template)

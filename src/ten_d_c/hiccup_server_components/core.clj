@@ -23,7 +23,8 @@
             [ten-d-c.hiccup-server-components.component-stats :as component-stats]
             [clojure.string :as str]
             [ten-d-c.hiccup-server-components.http-server :as http-server]
-            [ten-d-c.hiccup-server-components.markup-helpers :as markup-helpers])
+            [ten-d-c.hiccup-server-components.markup-helpers :as markup-helpers]
+            [ten-d-c.hiccup-server-components.built-in-components])
   (:gen-class))
 
 
