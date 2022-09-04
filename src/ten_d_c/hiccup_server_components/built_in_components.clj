@@ -220,7 +220,21 @@ markup-helpers/raw-html
  markup-helpers/string-template)
 
 
-#_(components/reg-component
-   :ux/html-template
-   {:hsc/built-in? true}
-   hc/string-template)
+(components/reg-component
+ :ux/html-template
+ {:doc ""
+
+  :examples {"Single template string"
+             [:ux/html-template
+              {:name "Bob Smith" :email-address "bobsmith@mailinator.com"}
+              "Your name is <strong>{{name}}</strong> and your email address is <em>{{email-address}}</em>"]
+
+             "Variable template string"
+             [:div
+              [:ux/html-template
+               {:name "Bob Smith" :email-address "bobsmith@mailinator.com"}
+               "Your name is <strong>{{name}}</strong> and"
+               "your email address is <em>{{email-address}}</em>"]]}
+
+  :hsc/built-in? true}
+ markup-helpers/html-template)

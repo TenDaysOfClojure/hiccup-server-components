@@ -40,7 +40,7 @@
 
 
 
-(defn string-template [variables content]
+(defn string-template [variables & content]
   (reduce
    (fn [updated-content [variable-name value]]
      (let [replacement-pattern (build-replacement-pattern
@@ -62,8 +62,13 @@
                                  (str value))]
 
        (string/replace updated-content replacement-pattern substitute-value)))
-   content
+   (string/join " " content)
    variables))
+
+
+(defn html-template [variables & content]
+  (raw-html
+   (apply string-template variables content)))
 
 
 (defn css-classes [& options-and-classes]

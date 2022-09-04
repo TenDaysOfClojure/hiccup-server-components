@@ -564,5 +564,5 @@
     {:name \"Bob Smith\" :email-address \"bobsmith@mailinator.com\"}
     \"Hello $name$ your email address is $email-address$\"))
   ```"
-  [variables string-template]
-  (markup-helpers/string-template variables string-template))
+  [variables & string-templates]
+  (apply markup-helpers/string-template variables string-template))

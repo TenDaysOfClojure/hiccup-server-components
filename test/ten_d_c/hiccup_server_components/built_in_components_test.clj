@@ -333,4 +333,75 @@
            [:div
             [:ux/string-template
              {:name "Bob Smith" :email-address "bobsmith@mailinator.com"}
-             "Your name is <name> and your email address is <email-address>"]]))))))
+             "Your name is {{name}} and"
+             "your email address is {{email-address}}"]])))
+
+      (is
+       (= expected-output
+          (hc/->hiccup
+           [:div
+            [:ux/string-template
+             {:name "Bob Smith" :email-address "bobsmith@mailinator.com"}
+             "Your name is"
+             "{{name}} and"
+             "your email address is {{email-address}}"]])))
+
+      (is
+       (= expected-output
+          (hc/->hiccup
+           [:div
+            [:ux/string-template
+             {:name "Bob Smith" :email-address "bobsmith@mailinator.com"}
+             "Your name is <name> and your email address is <email-address>"]])))))
+
+
+  (testing ":ux/html-template"
+
+    (hc/clear-components)
+
+    (assert-built-in-component-exists :ux/css-classes)
+
+    (let [expected-content "Your name is <strong>Bob Smith</strong> and your email address is <em>bobsmith@mailinator.com</em>"]
+
+      (let [[div content] (hc/->hiccup
+                           [:div
+                            [:ux/html-template
+                             {:name "Bob Smith" :email-address "bobsmith@mailinator.com"}
+                             "Your name is <strong>{{name}}</strong> and your email address is <em>{{email-address}}</em>"]])]
+
+        (is (= :div div))
+        (is (= hiccup.util.RawString (type content)))
+        (is (= expected-content (str content))))
+
+      (let [[div content] (hc/->hiccup
+                           [:div
+                            [:ux/html-template
+                             {:name "Bob Smith" :email-address "bobsmith@mailinator.com"}
+                             "Your name is <strong>{{name}}</strong> and"
+                             "your email address is <em>{{email-address}}</em>"]])]
+
+        (is (= :div div))
+        (is (= hiccup.util.RawString (type content)))
+        (is (= expected-content (str content))))
+
+      (let [[div content] (hc/->hiccup
+                           [:div
+                            [:ux/html-template
+                             {:name "Bob Smith" :email-address "bobsmith@mailinator.com"}
+                             "Your name is"
+                             "<strong>{{name}}</strong> and"
+                             "your email address is <em>{{email-address}}</em>"]])]
+
+        (is (= :div div))
+        (is (= hiccup.util.RawString (type content)))
+        (is (= expected-content (str content))))
+
+      (let [[div content] (hc/->hiccup
+                           [:div
+                            [:ux/html-template
+                             {:name "Bob Smith" :email-address "bobsmith@mailinator.com"}
+                             "Your name is <strong><name></strong> and your email address is <em><email-address></em>"]])]
+
+        (is (= :div div))
+        (is (= hiccup.util.RawString (type content)))
+        (is (= expected-content (str content) ))))))

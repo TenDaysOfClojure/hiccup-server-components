@@ -37,6 +37,18 @@
               {:name "Bob Smith" :email-address "bobsmith@mailinator.com"}
               "Hello {{name}} your email address is {{email-address}}")))
 
+      (is (= expected-output
+             (markup-helpers/string-template
+              {:name "Bob Smith" :email-address "bobsmith@mailinator.com"}
+              "Hello {{name}} your email address"
+              "is {{email-address}}")))
+
+      (is (= expected-output
+             (markup-helpers/string-template
+              {:name "Bob Smith" :email-address "bobsmith@mailinator.com"}
+              "Hello {{name}} your"
+              "email address is"
+              "{{email-address}}")))
 
       (is (= expected-output
              (markup-helpers/string-template
