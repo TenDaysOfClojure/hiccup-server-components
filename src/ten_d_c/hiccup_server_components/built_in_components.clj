@@ -62,7 +62,7 @@ markup-helpers/raw-html
    scripting (XSS) attacks - those strings should remain escaped.
 
    Converts provided `javascript-lines` into an unescaped string, allowing the
-   javascript to be executed by the browser if wrapped in a <script> tag.
+   javascript to be executed by the browser if wrapped in a &lt;script> tag.
 
    Used for including executable javascript in Hiccup data."
 
@@ -84,7 +84,7 @@ markup-helpers/raw-html
    scripting (XSS) attacks - those strings should remain escaped.
 
    Converts provided `javascript-lines` into an unescaped string and wraps
-   it in a <script> tag, executing the javascript in the web browser.
+   it in a &lt;script> tag, executing the javascript in the web browser.
 
    Used for including executable javascript in Hiccup data."
 
@@ -198,23 +198,37 @@ markup-helpers/raw-html
  :ux/string-template
  {:doc
   "Returns a string where interpolated variables are replaced using values in
-  the map provided by `variables` allowing for templated strings.
+   the map provided by `variables` allowing for templated strings.
 
-  Interpolated variables can be tags enclosed as follows (where `my-value` is
-  the name of the variable to replace):
+   Interpolated variables can be tags enclosed as follows (where `my-value` is
+   the name of the variable to replace):
 
-  - `\"Hello {{my-value}}\"`
-  - `\"Hello {my-value}\"`
-  - `\"Hello <<my-value>>\"`
-  - `\"Hello <my-value>\"`
-  - `\"Hello !!my-value!!\"`
-  - `\"Hello !my-value!\"`
-  - `\"Hello $$my-value$$\"`
-  - `\"Hello $my-value$\"`"
+   - `\"Hello {{my-value}}\"`
 
-  :example [:ux/string-template
-            {:name "Bob" :email-address "bobsmith@mailinator.com"}
-            "Hello {{name}}, your email address is {{email-address}}"]
+   - `\"Hello {my-value}\"`
+
+   - `\"Hello <<my-value>>\"`
+
+   - `\"Hello <my-value>\"`
+
+   - `\"Hello !!my-value!!\"`
+
+   - `\"Hello !my-value!\"`
+
+   - `\"Hello $$my-value$$\"`
+
+   - `\"Hello $my-value$\"`"
+
+  :examples {"Single template string"
+             [:ux/string-template
+              {:name "Bob" :email-address "bobsmith@mailinator.com"}
+              "Hello {{name}}, your email address is {{email-address}}"]
+
+             "Variable template string"
+             [:ux/string-template
+              {:name "Bob" :email-address "bobsmith@mailinator.com"}
+              "Hello {{name}}, your "
+              "email address is {{email-address}}"]}
 
   :hsc/built-in? true}
  markup-helpers/string-template)
@@ -222,7 +236,33 @@ markup-helpers/raw-html
 
 (components/reg-component
  :ux/html-template
- {:doc ""
+ {:doc
+
+  "**Warning:** Never provide strings that come from external sources or user
+   defined input as they could include malicious JavaScript and cause cross-site
+   scripting (XSS) attacks - those strings should remain escaped.
+
+   Returns an unescaped HTML string where interpolated variables are replaced using values in
+   the map provided by `variables` allowing for templated HTML strings.
+
+   Interpolated variables can be tags enclosed as follows (where `my-value` is
+   the name of the variable to replace):
+
+   - `\"Hello {{my-value}}\"`
+
+   - `\"Hello {my-value}\"`
+
+   - `\"Hello <<my-value>>\"`
+
+   - `\"Hello <my-value>\"`
+
+   - `\"Hello !!my-value!!\"`
+
+   - `\"Hello !my-value!\"`
+
+   - `\"Hello $$my-value$$\"`
+
+   - `\"Hello $my-value$\"`"
 
   :examples {"Single template string"
              [:ux/html-template
