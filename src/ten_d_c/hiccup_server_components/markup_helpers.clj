@@ -29,12 +29,11 @@
 
 
 (defn raw-html [& html]
-  (hiccup/raw (string/join html)))
+  (hiccup/raw (string/join " " (flatten html))))
 
 
 (defn javascript [& javascript]
-  (let [sanitised (-> javascript
-                      (string/join)
+  (let [sanitised (-> (string/join " " (or javascript ""))
                       (string/replace #"\s+\n+\s+|\n+\s+|\s+\n+|\n+" " "))]
     (hiccup/raw sanitised)))
 

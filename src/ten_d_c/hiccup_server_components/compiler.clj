@@ -48,17 +48,20 @@
     element local-components apply-to-component-output []))
 
   ([element local-components apply-to-component-output component-path]
-   (when (and (qualified-keyword? element)
-              (not (components/is-component? element local-components)))
-     (let [full-component-path (conj component-path [] element)]
 
-       (throw (ex-info
-               (str "Component referenced but not registered. Component `"
-                    element "` in " (string/join " > " full-component-path)
-                    " needs to be registered via `reg-component`"
-                    " or provided as `local-component`")
-               (merge {:element-name element :component-path full-component-path}
-                      (components/get-meta-data (last component-path)))))))
+   ;; Don't throw an exception if the qualified keyword isn't associated with
+   ;; a component. Make this configurable.
+   #_(when (and (qualified-keyword? element)
+                (not (components/is-component? element local-components)))
+       (let [full-component-path (conj component-path [] element)]
+
+         (throw (ex-info
+                 (str "Component referenced but not registered. Component `"
+                      element "` in " (string/join " > " full-component-path)
+                      " needs to be registered via `reg-component`"
+                      " or provided as `local-component`")
+                 (merge {:element-name element :component-path full-component-path}
+                        (components/get-meta-data (last component-path)))))))
 
    (cond
      ;; If the element is a keyword check if the keyword has been registred
@@ -68,7 +71,6 @@
      (if (components/is-component? element local-components)
        {:hiccup-server-components/element-name element}
        element)
-
 
      ;; Check if the element represents a component and if so, extract
      ;; the component and get the output.

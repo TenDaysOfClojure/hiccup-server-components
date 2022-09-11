@@ -168,11 +168,6 @@
       {:element-name element}))
 
 
-(defn get-docs [element]
-  (select-keys (get-meta-data element)
-               [:doc :example :examples]))
-
-
 (defn clear-components []
   "Clears all components and associated meta-data that where
    registered using `->reg-component`"

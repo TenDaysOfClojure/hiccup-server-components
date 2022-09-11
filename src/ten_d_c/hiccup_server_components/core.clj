@@ -20,7 +20,6 @@
             [ten-d-c.hiccup-server-components.compiler :as compiler]
             [clojure.string :as string]
             [hiccup2.core :as hiccup]
-            [ten-d-c.hiccup-server-components.component-stats :as component-stats]
             [clojure.string :as str]
             [ten-d-c.hiccup-server-components.http-server :as http-server]
             [ten-d-c.hiccup-server-components.markup-helpers :as markup-helpers]
@@ -57,14 +56,6 @@
   registered via `reg-component`"
   [element-name]
   (components/get-meta-data element-name))
-
-
-(defn get-component-docs
-  "Gets component documentation (a map including a `doc` and `example` / `examples`
-   key if availible) from it's metadata that was associated with the component
-   when registered via `reg-component`"
-  [element-name]
-  (components/get-docs element-name))
 
 
 (defn reg-component
@@ -261,23 +252,7 @@
     file-path component-element-name params local-components)))
 
 
-(defn component-counts
-  "Provides a summary for component counts grouped by component namespace
-
-  Returns a list of maps that include a `component-namespace` and
-  `total-components` key:
-
-  ```
-  ({:component-namespace \"ux.components\", :total-components 2}
-   {:component-namespace \"ux.layouts\", :total-components 2})
-  ```"
-  ([] (component-stats/component-counts))
-
-  ([all-components]
-   (component-stats/component-counts all-components)))
-
-
-(defn raw-html
+(defn ^:no-doc raw-html
   "**Warning:** Never provide strings that come from external sources or user
    defined input as they could include malicious JavaScript and cause cross-site
    scripting (XSS) attacks - those strings should remain escaped.
@@ -292,7 +267,7 @@
   (apply markup-helpers/raw-html html))
 
 
-(defn javascript
+(defn ^:no-doc javascript
   "**Warning:** Never provide strings that come from external sources or user
    defined input as they could include malicious JavaScript and cause cross-site
    scripting (XSS) attacks - those strings should remain escaped.
@@ -404,7 +379,7 @@
   (http-server/wrap-response-middleware request))
 
 
-(defn css-classes
+(defn ^:no-doc css-classes
   "Constructs a list of css classes that can be used as the \"class\" attribute
   of HTML elements.
 
@@ -509,7 +484,7 @@
   (apply markup-helpers/css-classes options-and-classes))
 
 
-(defn string-template
+(defn ^:no-doc string-template
   "Returns a string where interpolated variables are replaced using values in
   the map provided by `variables` allowing for templated strings.
 
