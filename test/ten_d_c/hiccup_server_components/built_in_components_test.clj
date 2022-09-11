@@ -8,10 +8,12 @@
   (let [metadata (hc/get-component-meta-data element-name)]
 
     (is (= "ten_d_c.hiccup_server_components.built_in_components"
-           (:namespace metadata)))
+           (:namespace metadata))
+        (str "Test failed for " element-name))
 
     (is (true?
-         (:hsc/built-in? metadata)))))
+         (:hsc/built-in? metadata))
+        (str "Test failed for " element-name))))
 
 
 (deftest built-in-components-test
@@ -184,17 +186,17 @@
 
       (is (= hiccup.util.RawString (type js)))
 
-      (is (= "alert('one');alert('two');alert('three');" (str js)))))
+      (is (= "alert('one'); alert('two'); alert('three');" (str js)))))
 
 
-  (testing ":ux/execute-javascript"
+  (testing ":ux/javascript-tag"
 
     (hc/clear-components)
 
-    (assert-built-in-component-exists :ux/execute-javascript)
+    (assert-built-in-component-exists :ux/javascript-tag)
 
     (let [[script-tag js] (hc/->hiccup
-                           [:ux/execute-javascript "alert('Hello world')"])]
+                           [:ux/javascript-tag "alert('Hello world')"])]
 
       (is (= :script script-tag))
       (is (= hiccup.util.RawString (type js)))
@@ -202,7 +204,7 @@
 
 
     (let [[script-tag js] (hc/->hiccup
-                           [:ux/execute-javascript
+                           [:ux/javascript-tag
                             "document.addEventListener('readystatechange', event => {
                                console.log('Document ready state changed');
                             });"])]
@@ -214,14 +216,14 @@
              (str js))))
 
 
-    (let [[script-tag js] (hc/->hiccup [:ux/execute-javascript
+    (let [[script-tag js] (hc/->hiccup [:ux/javascript-tag
                                         "alert('one');"
                                         "alert('two');"
                                         "alert('three');"])]
 
       (is (= :script script-tag))
       (is (= hiccup.util.RawString (type js)))
-      (is (= "alert('one');alert('two');alert('three');" (str js)))))
+      (is (= "alert('one'); alert('two'); alert('three');" (str js)))))
 
 
   (testing ":ux/html"
