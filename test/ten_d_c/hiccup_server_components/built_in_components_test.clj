@@ -406,4 +406,45 @@
 
         (is (= :div div))
         (is (= hiccup.util.RawString (type content)))
-        (is (= expected-content (str content) ))))))
+        (is (= expected-content (str content))))))
+
+
+  (testing ":ux/style-tag"
+
+    (hc/clear-components)
+
+    (assert-built-in-component-exists :ux/style-tag)
+
+
+    #_#_:examples
+    {"Single line"
+     [:ux/style-tag
+      ".danger {color: red;}
+.success {color: green;}"]
+
+     "Multiple lines"
+     [:ux/style-tag
+      ".danger {color: red;}"
+      ".success {color: green;}"
+      ".info {color: blue;}"]}
+
+    (let [[style-tag content] (hc/->hiccup
+                               [:ux/style-tag
+                                ".danger {color: red;}
+.success {color: green;}"])]
+
+      (is (= style-tag :style))
+      (is (= hiccup.util.RawString (type content)))
+      (is (= ".danger {color: red;}\n.success {color: green;}"
+             (str content))))
+
+    (let [[style-tag content] (hc/->hiccup
+                               [:ux/style-tag
+                                ".danger {color: red;}"
+                                ".success {color: green;}"
+                                ".info {color: blue;}"])]
+
+      (is (= style-tag :style))
+      (is (= hiccup.util.RawString (type content)))
+      (is (= ".danger {color: red;} .success {color: green;} .info {color: blue;}"
+             (str content))))))
