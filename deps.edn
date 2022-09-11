@@ -9,9 +9,9 @@
                       refactor-nrepl/refactor-nrepl {:mvn/version "3.5.4"}
                       cider/cider-nrepl {:mvn/version "0.28.5"}
                       io.github.clojure/tools.build {:git/tag "v0.8.3" :git/sha "0d20256"}}
-         :main-opts ["-m" "nrepl.cmdline"
-                     "--middleware"
-                     "[refactor-nrepl.middleware/wrap-refactor,cider.nrepl/cider-middleware]"]}
+          :main-opts ["-m" "nrepl.cmdline"
+                      "--middleware"
+                      "[refactor-nrepl.middleware/wrap-refactor,cider.nrepl/cider-middleware]"]}
 
    ;; `clojure -X:test`
    :test {:extra-paths ["test"]
@@ -36,8 +36,7 @@
                                                     .namespace-docs {left: 250px !important;}"]]]}}}
 
    ;; `clj -T:build all`
-   :build {:paths ["src"]
-           :deps {io.github.clojure/tools.build {:git/tag "v0.8.3" :git/sha "0d20256"}}
+   :build {:deps {io.github.clojure/tools.build {:git/tag "v0.8.3" :git/sha "0d20256"}}
            :ns-default build}
 
    ;; `env clj -X:deploy`
@@ -45,5 +44,6 @@
             :exec-fn deps-deploy.deps-deploy/deploy
             :exec-args {:installer :remote
                         :sign-releases? false
+                        ;; Pom.xml build by tools.build
                         :pom-file "target/classes/META-INF/maven/net.clojars.t_d_c/hiccup-server-components/pom.xml"
                         :artifact "target/hiccup-server-components.jar"}}}}
