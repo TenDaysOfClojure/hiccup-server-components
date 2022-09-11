@@ -4,12 +4,23 @@
         hiccup/hiccup       {:mvn/version "2.0.0-alpha2"}}
 
  :aliases
- {:test {:extra-paths ["test"]
-         :extra-deps {io.github.cognitect-labs/test-runner
-                      {:git/tag "v0.5.1" :git/sha "dfb30dd"}}
-         :main-opts ["-m" "cognitect.test-runner"]
-         :exec-fn cognitect.test-runner.api/test}
+ { ;; `clojure -M:repl`
+   :repl {:extra-deps {nrepl/nrepl {:mvn/version "0.9.0"}
+                      refactor-nrepl/refactor-nrepl {:mvn/version "3.5.4"}
+                      cider/cider-nrepl {:mvn/version "0.28.5"}
+                      io.github.clojure/tools.build {:git/tag "v0.8.3" :git/sha "0d20256"}}
+         :main-opts ["-m" "nrepl.cmdline"
+                     "--middleware"
+                     "[refactor-nrepl.middleware/wrap-refactor,cider.nrepl/cider-middleware]"]}
 
+   ;; `clojure -X:test`
+   :test {:extra-paths ["test"]
+          :extra-deps {io.github.cognitect-labs/test-runner
+                      {:git/tag "v0.5.1" :git/sha "dfb30dd"}}
+          :main-opts ["-m" "cognitect.test-runner"]
+          :exec-fn cognitect.test-runner.api/test}
+
+   ;; `clojure -X:codox`
    :codox {:extra-deps {codox/codox {:mvn/version "0.10.8"}}
            :exec-fn codox.main/generate-docs
            :exec-args {:name "Hiccup Server Components"
@@ -24,12 +35,15 @@
                                            [:style ".sidebar {width: 250px !important; left: 0 !important;}
                                                     .namespace-docs {left: 250px !important;}"]]]}}}
 
+   ;; `clj -T:build all`
    :build {:paths ["src"]
-           :extra-deps {io.github.clojure/tools.build {:git/tag "v0.8.3" :git/sha "0d20256"}}
+           :deps {io.github.clojure/tools.build {:git/tag "v0.8.3" :git/sha "0d20256"}}
            :ns-default build}
 
-   :deploy {:extra-deps {slipset/deps-deploy {:mvn/version "RELEASE"}}
+   ;; `env clj -X:deploy`
+   :deploy {:extra-deps {slipset/deps-deploy {:mvn/version "0.2.0"}}
             :exec-fn deps-deploy.deps-deploy/deploy
             :exec-args {:installer :remote
                         :sign-releases? false
+                        :pom-file "target/classes/META-INF/maven/net.clojars.t_d_c/hiccup-server-components/pom.xml"
                         :artifact "target/hiccup-server-components.jar"}}}}
