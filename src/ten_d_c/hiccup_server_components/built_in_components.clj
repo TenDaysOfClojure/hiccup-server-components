@@ -290,11 +290,7 @@
 (components/reg-component
  :ux/html-template
  {:doc
-  "**Warning:** Never provide strings that come from external sources or user
-   defined input as they could include malicious JavaScript and cause cross-site
-   scripting (XSS) attacks - those strings should remain escaped.
-
-   Returns an unescaped HTML string where interpolated variables are replaced using values in
+  "Returns an unescaped HTML string where interpolated variables are replaced using values in
    the map provided by `variable-substitution-map` allowing for templated HTML strings.
 
    Interpolated variables can be tags enclosed as follows (where `my-value` is
@@ -314,7 +310,11 @@
 
    - `\"Hello $$my-value$$\"`
 
-   - `\"Hello $my-value$\"`"
+   - `\"Hello $my-value$\"`
+
+   **Warning:** Never provide strings that come from external sources or user
+   defined input as they could include malicious JavaScript and cause cross-site
+   scripting (XSS) attacks - those strings should remain escaped."
 
   :arglists '([variable-substitution-map & html-string-template])
 

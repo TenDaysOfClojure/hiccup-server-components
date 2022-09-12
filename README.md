@@ -19,6 +19,7 @@ Can be used seamlessly with HTTP routing libraries such as [Reitit](https://gith
 - [Composing components](#composing-components)
 - [Organising components](#organising-components)
 - [Generating HTML](#generating-html)
+- [Built-in components](#built-in-components)
 - [HTTP routing middleware](#http-routing-middleware)
 - [Full API documentation](https://tendaysofclojure.github.io/hiccup-server-components-api-docs/ten-d-c.hiccup-server-components.core.html)
 
@@ -31,13 +32,13 @@ Add the following dependancy to your Clojure projects to get the latest version:
 #### Clojure CLI/deps.edn:
 
 ```clojure
-net.clojars.t_d_c/hiccup-server-components {:mvn/version "0.18.44"}
+net.clojars.t_d_c/hiccup-server-components {:mvn/version "0.19.0"}
 ```
 
 #### Leiningen/Boot:
 
 ```clojure
-[net.clojars.t_d_c/hiccup-server-components "0.18.44"]
+[net.clojars.t_d_c/hiccup-server-components "0.19.0"]
 ```
 
 [back to top](#table-of-contents)
@@ -1242,6 +1243,33 @@ saves the output to the given `file-path`.
 See [API docs](https://tendaysofclojure.github.io/hiccup-server-components-api-docs/ten-d-c.hiccup-server-components.core.html) for details.
 
 [back to top](#table-of-contents)
+
+
+# Built-in components
+
+Hiccup server components ships with a number of built-in components that are common to web app development.
+
+See the [built-in component documentation](https://tendaysofclojure.github.io/hiccup-server-components-api-docs/component-docs.html) for more details on built-in components.
+
+**Summary of built-in components:**
+
+ - [`:ux/css-classes`](https://tendaysofclojure.github.io/hiccup-server-components-api-docs/component-docs.html#ux-css-classes): Constructs a list of one or more css classes that can be used as the "class" attribute of HTML elements.
+
+ - [`:ux/fragment`](https://tendaysofclojure.github.io/hiccup-server-components-api-docs/component-docs.html#ux-fragment): Allows for returning multiple child elements without the need for a parent element.
+
+ - [`:ux/html`](https://tendaysofclojure.github.io/hiccup-server-components-api-docs/component-docs.html#ux-html): Used for including strings that contain HTML markup, this component converts the provided `html` into an unescaped string, allowing the HTML to be rendered by the browser.
+
+ - [`:ux/html-template`](https://tendaysofclojure.github.io/hiccup-server-components-api-docs/component-docs.html#ux-html-template): Returns an unescaped HTML string where interpolated variables are replaced using values in the map provided by `variable-substitution-map` allowing for templated HTML strings.
+
+ - [`:ux/html5-doc`](https://tendaysofclojure.github.io/hiccup-server-components-api-docs/component-docs.html#ux-html5-doc): Constructs a HTML5 document with the correct DOCTYPE using the given `document` as child elements (e.g head, body) of the &lt;html> tag..
+
+ - [`:ux/javascript`](https://tendaysofclojure.github.io/hiccup-server-components-api-docs/component-docs.html#ux-javascript): Used for including unescaped, executable javascript in Hiccup data.
+
+ - [`:ux/javascript-tag`](https://tendaysofclojure.github.io/hiccup-server-components-api-docs/component-docs.html#ux-javascript-tag): Wraps the supplied `javascript-lines` in a &lt;script> tag which executes the javascript in the web browser.
+
+ - [`:ux/string-template`](https://tendaysofclojure.github.io/hiccup-server-components-api-docs/component-docs.html#ux-string-template): Returns a string where interpolated variables are replaced using values in the map provided by `variable-substitution-map` allowing for templated strings.
+
+ - [`:ux/style-tag`](https://tendaysofclojure.github.io/hiccup-server-components-api-docs/component-docs.html#ux-style-tag): A &lt;style> tag used to define style information (CSS) for a document.
 
 # HTTP routing middleware
 
