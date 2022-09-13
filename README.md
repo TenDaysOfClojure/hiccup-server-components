@@ -1249,7 +1249,7 @@ See [API docs](https://tendaysofclojure.github.io/hiccup-server-components-api-d
 
 Hiccup server components ships with a number of built-in components that are common to web app development.
 
-See the [built-in component documentation](https://tendaysofclojure.github.io/hiccup-server-components-api-docs/component-docs.html) for more details on built-in components.
+See the [built-in component documentation](https://tendaysofclojure.github.io/hiccup-server-components-api-docs/component-docs/index.html) for more details on built-in components.
 
 **Summary of built-in components:**
 
@@ -1278,7 +1278,7 @@ See the [built-in component documentation](https://tendaysofclojure.github.io/hi
 
 
  - [`:ux/style-tag`](https://tendaysofclojure.github.io/hiccup-server-components-api-docs/component-docs/index.html#ux-style-tag): A &lt;style> tag used to define style information (CSS) for a document.
- 
+
 # HTTP routing middleware
 
 Ring middleware that will generate HTML using Hiccup server components conventions
