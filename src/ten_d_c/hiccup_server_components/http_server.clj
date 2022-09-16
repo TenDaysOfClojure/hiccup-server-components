@@ -12,7 +12,7 @@
   (fn [request]
     (let [response (handler request)]
       (if (hiccup-server-components-response? response)
-        (let[html (if-let [component (:hsc/component response)]
+        (let [html (if-let [component (:hsc/component response)]
                     (compiler/component->html component
                                               (:hsc/params response)
                                               {})

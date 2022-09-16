@@ -18,12 +18,11 @@
   for examples and further details."
   (:require [ten-d-c.hiccup-server-components.components :as components]
             [ten-d-c.hiccup-server-components.compiler :as compiler]
-            [clojure.string :as string]
             [hiccup2.core :as hiccup]
-            [clojure.string :as str]
             [ten-d-c.hiccup-server-components.http-server :as http-server]
             [ten-d-c.hiccup-server-components.markup-helpers :as markup-helpers]
-            [ten-d-c.hiccup-server-components.built-in-components])
+            [ten-d-c.hiccup-server-components.built-in-components]
+            [hiccup2.core :as hiccup])
   (:gen-class))
 
 
@@ -406,7 +405,7 @@
   ;; => \"bg-red-400 text-red-600\"
   ```
 
- Example without variable substitution:
+  Example without variable substitution:
 
   ```clojure
   ;; `{{colour}}` will be substituted with \"red\"

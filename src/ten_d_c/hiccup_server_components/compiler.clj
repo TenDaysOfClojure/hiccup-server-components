@@ -5,23 +5,23 @@
             [ten-d-c.hiccup-server-components.components :as components]))
 
 
-(defn get-component-output
+(defn- get-component-output
+  "Gets the component output by executing the function (where the component
+  is registered with a function) or in the case of a string/vector component returns
+  the value provided at registration."
   [element-name component component-params component-path]
-  (cond
-    (fn? component)
+  (if (fn? component)
     (components/run-component-function
      element-name
      (conj component-path element-name)
      component
      component-params)
 
-    (or (hiccup-util/raw-string? component)
-        (string? component)
-        (vector? component))
+    ;; string/vector component, just return the component.
     component))
 
 
-(defn get-recursive-component-output
+(defn- get-recursive-component-output
   [element-name
    component
    component-params
@@ -40,6 +40,26 @@
      (conj component-path element-name))))
 
 
+(defn- map-recursive-component-output
+  [parts local-components component-path apply-to-component-output]
+  (mapv (fn [part]
+          (if (components/component-reference? part)
+            (let [[element-name component] (components/extract-component-reference
+                                            part local-components)]
+
+              (get-recursive-component-output
+               element-name
+               component
+               nil ;; No component params
+               component-path
+               local-components
+               apply-to-component-output))
+
+            ;; Not a component reference
+            part))
+        parts))
+
+
 (defn- process-component
   "Used in conjunction with `clojure.walk/post-walk` checking the `element` and executing
    different logic based on the type of element to achieve expansion of components."
@@ -48,20 +68,6 @@
     element local-components apply-to-component-output []))
 
   ([element local-components apply-to-component-output component-path]
-
-   ;; Don't throw an exception if the qualified keyword isn't associated with
-   ;; a component. Make this configurable.
-   #_(when (and (qualified-keyword? element)
-                (not (components/is-component? element local-components)))
-       (let [full-component-path (conj component-path [] element)]
-
-         (throw (ex-info
-                 (str "Component referenced but not registered. Component `"
-                      element "` in " (string/join " > " full-component-path)
-                      " needs to be registered via `reg-component`"
-                      " or provided as `local-component`")
-                 (merge {:element-name element :component-path full-component-path}
-                        (components/get-meta-data (last component-path)))))))
 
    (cond
      ;; If the element is a keyword check if the keyword has been registred
@@ -79,13 +85,19 @@
      (components/component-definition? element)
      (let [[element-name
             component
-            component-params]  (components/extract-component
-                                element local-components)]
+            component-params] (components/extract-component
+                               element local-components)
+
+           adjusted-params    (map-recursive-component-output
+                               component-params
+                               local-components
+                               component-path
+                               apply-to-component-output)]
 
        (get-recursive-component-output
         element-name
         component
-        component-params
+        adjusted-params
         component-path
         local-components
         apply-to-component-output))
@@ -97,28 +109,15 @@
      ;; `apply-to-component-output` function which will recursively
      ;; expand nested components.
      (components/references-component? element)
-     (mapv (fn [part]
-             (if (components/component-reference? part)
-               (let [[element-name
-                      component]   (components/extract-component-reference
-                                    part local-components)]
-
-                 (get-recursive-component-output
-                  element-name
-                  component
-                  nil ;; No component params
-                  component-path
-                  local-components
-                  apply-to-component-output))
-
-               ;; Not a component reference
-               part))
-           element)
+     (map-recursive-component-output
+      element
+      local-components
+      component-path
+      apply-to-component-output)
 
 
      ;; Otherwise return the element as is.
      :else element)))
-
 
 
 (defn- apply-components

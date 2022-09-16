@@ -6,6 +6,7 @@
 
 (components/reg-component
  :ux/html5-doc
+
  {:doc
   "Constructs a HTML5 document with the correct DOCTYPE using the given `document`
    as child elements (e.g head, body) of the &lt;html> tag."
@@ -20,6 +21,7 @@
              [:h1 "Hello world"]]]
 
   :hsc/built-in? true}
+
  (fn [& document]
    (list
     (markup-helpers/raw-html "<!DOCTYPE html>")
@@ -61,6 +63,7 @@
 
 (components/reg-component
  :ux/javascript
+
  {:doc
   "Used for including unescaped, executable javascript in Hiccup data.
 
@@ -89,11 +92,13 @@
     alert('You canceled!');
   }"]}
   :hsc/built-in? true}
+
  markup-helpers/javascript)
 
 
 (components/reg-component
  :ux/javascript-tag
+
  {:doc
   "Wraps the supplied `javascript-lines` in a &lt;script> tag which executes the javascript in the
    web browser.
@@ -112,6 +117,7 @@
                                "alert('Goodbye world');"]}
 
   :hsc/built-in? true}
+
  (fn [& javascript-lines]
    [:script
     (apply markup-helpers/javascript javascript-lines)]))
@@ -119,6 +125,7 @@
 
 (components/reg-component
  :ux/html
+
  {:doc
   "Used for including strings that contain HTML markup, this component converts
    the provided `html` into an unescaped string, allowing the HTML to be
@@ -141,11 +148,13 @@
               "<a href=\"https://example.com\">Test link</a>"]}
 
   :hsc/built-in? true}
+
  markup-helpers/raw-html)
 
 
 (components/reg-component
  :ux/css-classes
+
  {:doc
   "Constructs a list of one or more css classes that can be used as the
    \"class\" attribute of HTML elements.
@@ -242,11 +251,13 @@
               "This is a test"]}
 
   :hsc/built-in? true}
+
  markup-helpers/css-classes)
 
 
 (components/reg-component
  :ux/string-template
+
  {:doc
   "Returns a string where interpolated variables are replaced using values in
    the map provided by `variable-substitution-map` allowing for templated strings.
@@ -284,11 +295,13 @@
               "email address is {{email-address}}."]}
 
   :hsc/built-in? true}
+
  markup-helpers/string-template)
 
 
 (components/reg-component
  :ux/html-template
+
  {:doc
   "Returns an unescaped HTML string where interpolated variables are replaced using values in
    the map provided by `variable-substitution-map` allowing for templated HTML strings.
@@ -331,11 +344,13 @@
                "your email address is <em>{{email-address}}</em>"]]}
 
   :hsc/built-in? true}
+
  markup-helpers/html-template)
 
 
 (components/reg-component
  :ux/style-tag
+
  {:doc
   "A &lt;style> tag used to define style information (CSS) for a document."
 
@@ -352,6 +367,56 @@
     ".info {color: blue;}"]}
 
   :hsc/built-in? true}
+
  (fn [& lines]
    [:style
     [:ux/html lines]]))
+
+
+(components/reg-component
+ :ux/include-stylesheets
+
+ {:doc
+  "Includes one or more &lt;link> tags that link to external style sheets.
+   Accepts a variable list of `stylesheet-urls`."
+
+  :arglists '([& stylesheet-urls])
+
+  :examples {"Single stylesheet link"
+             [:ux/include-stylesheets "/css/base.css"]
+
+             "Multiple stylesheet links"
+             [:ux/include-stylesheets
+              "/css/base.css"
+              "/css/theme.css"]}
+
+  :hsc/built-in? true}
+
+ (fn [& stylesheet-urls]
+   (for [stylesheet-url stylesheet-urls]
+     [:link {:rel "stylesheet"
+             :href stylesheet-url}])))
+
+
+(components/reg-component
+ :ux/include-javascripts
+
+ {:doc
+  "Includes one or more &lt;script> tags that link to external javascript files
+   through the `src` attribute. Accepts a variable list of `javascript-urls`."
+
+  :arglists '([& javascript-urls])
+
+  :examples {"Single javascript file"
+             [:ux/include-javascripts "/css/base.js"]
+
+             "Multiple javascript files"
+             [:ux/include-javascripts
+              "/css/base.js"
+              "/css/app.js"]}
+
+  :hsc/built-in? true}
+
+ (fn [& javascript-urls]
+   (for [javascript-url javascript-urls]
+     [:script {:src javascript-url}])))

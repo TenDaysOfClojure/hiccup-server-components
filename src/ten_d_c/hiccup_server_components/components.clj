@@ -162,7 +162,6 @@
 
 ;; -- Public API --
 
-
 (defn get-meta-data [element]
   (or (get @global-component-metadata element)
       {:element-name element}))
@@ -231,13 +230,15 @@
       (first)))
 
 
-(defn run-component-function [element-name component-path component-function component-params]
+(defn run-component-function
+  [element-name component-path component-function component-params]
   (try
     (apply component-function component-params)
 
     (catch clojure.lang.ArityException ex
-      (throw (ex-info (str "Component called with the incorrect amount of arguments: "
-                           (extract-arity-message ex)
-                           " " element-name)
-                      {:called-component element-name
-                       :full-component-path (map get-meta-data component-path)})))))
+      (throw (ex-info
+              (str "Component called with the incorrect amount of arguments: "
+                   (extract-arity-message ex)
+                   " " element-name)
+              {:called-component element-name
+               :full-component-path (map get-meta-data component-path)})))))
